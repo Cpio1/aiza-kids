@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Camera, ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
+import { Camera, ChevronLeft, ChevronRight, Expand, Images, X } from "lucide-react";
 import { asset } from "@/lib/path";
+import { srcSetOf, type MediaItem } from "@/lib/media";
 import { useLang } from "../LanguageProvider";
 import { Heading } from "../ui/Heading";
 import { Cloud, Flower, KindergartenIllustration, Sparkle, Star, Wave } from "../ui/Decor";
@@ -10,32 +11,79 @@ import { Responsive } from "../ui/Responsive";
 
 type OpenFn = (i: number) => void;
 
-function Thumb({ src, index, onOpen, className = "", eager }: { src: string; index: number; onOpen: OpenFn; className?: string; eager?: boolean }) {
+// Разнообразные асимметричные формы и чередующиеся фиолетовые/жёлтые рамки
+const FRAMES = [
+  { outer: "rounded-[1.75rem_0.75rem_1.75rem_1.75rem]", inner: "rounded-[1.45rem_0.5rem_1.45rem_1.45rem]", ring: "from-[#7545CB] to-[#B49AF0]" },
+  { outer: "rounded-[0.75rem_1.75rem_1.75rem_1.75rem]", inner: "rounded-[0.5rem_1.45rem_1.45rem_1.45rem]", ring: "from-[#FFD84D] to-[#FFE47A]" },
+  { outer: "rounded-[1.75rem]", inner: "rounded-[1.45rem]", ring: "from-[#B49AF0] to-[#FFD84D]" },
+  { outer: "rounded-[1.75rem_1.75rem_0.75rem_1.75rem]", inner: "rounded-[1.45rem_1.45rem_0.5rem_1.45rem]", ring: "from-[#FFD84D] to-[#B49AF0]" },
+  { outer: "rounded-[1.75rem_1.75rem_1.75rem_0.75rem]", inner: "rounded-[1.45rem_1.45rem_1.45rem_0.5rem]", ring: "from-[#8B63D9] to-[#7545CB]" },
+];
+
+/** Превью в рамке. Рамка повторяет пропорции фото — ничего не обрезается и не растягивается. */
+function Thumb({ item, index, onOpen, sizes, eager, className = "", style }: { item: MediaItem; index: number; onOpen: OpenFn; sizes: string; eager?: boolean; className?: string; style?: React.CSSProperties }) {
   const { t } = useLang();
   const [broken, setBroken] = useState(false);
+  const f = FRAMES[index % FRAMES.length];
   return (
     <button
       type="button"
+      data-index={index}
       onClick={() => onOpen(index)}
       aria-label={`${t.gallery.open} ${index + 1}`}
-      className={`group relative block overflow-hidden bg-sky/40 shadow-sm ring-1 ring-white ${className}`}
+      className={`group relative block bg-gradient-to-br p-[4px] shadow-[0_12px_28px_-18px_rgba(48,35,71,.55)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_34px_-18px_rgba(117,69,203,.6)] ${f.outer} ${f.ring} ${className}`}
+      style={style}
     >
-      {broken ? (
-        <KindergartenIllustration className="size-full" />
-      ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={asset(src)}
-          alt={`${t.gallery.photo} ${index + 1}`}
-          loading={eager ? "eager" : "lazy"}
-          decoding="async"
-          onError={() => setBroken(true)}
-          className="size-full object-cover object-[50%_30%] transition duration-500 group-hover:scale-105"
-        />
-      )}
-      <span aria-hidden className="absolute bottom-2 right-2 grid size-8 place-items-center rounded-full bg-white/85 opacity-0 shadow transition group-hover:opacity-100 group-focus-visible:opacity-100">
+      <span className={`block overflow-hidden bg-[#F1EAFF] ${f.inner}`} style={{ aspectRatio: `${item.w} / ${item.h}` }}>
+        {broken ? (
+          <KindergartenIllustration className="size-full" />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={asset(item.thumb)}
+            srcSet={srcSetOf(item, asset)}
+            sizes={sizes}
+            width={item.w}
+            height={item.h}
+            alt={`${t.gallery.photo} ${index + 1}`}
+            loading={eager ? "eager" : "lazy"}
+            decoding="async"
+            onError={() => setBroken(true)}
+            className="size-full object-cover transition duration-500 group-hover:scale-[1.04]"
+          />
+        )}
+      </span>
+      <span aria-hidden className="absolute bottom-3 right-3 grid size-8 place-items-center rounded-full bg-white/90 text-[#7545CB] opacity-0 shadow transition group-hover:opacity-100 group-focus-visible:opacity-100">
         <Expand className="size-4" />
       </span>
+    </button>
+  );
+}
+
+/** После «Показать ещё» переводим фокус на первую новую фотографию. */
+function useReveal(total: number, initial: number) {
+  const [all, setAll] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  const toggle = () => {
+    const opening = !all;
+    setAll(opening);
+    if (opening)
+      requestAnimationFrame(() => listRef.current?.querySelector<HTMLElement>(`[data-index="${initial}"]`)?.focus({ preventScroll: false }));
+  };
+  return { all, toggle, listRef, count: all ? total : Math.min(total, initial), hidden: Math.max(0, total - initial) };
+}
+
+function MoreButton({ all, hidden, onClick, className = "" }: { all: boolean; hidden: number; onClick: () => void; className?: string }) {
+  const { t } = useLang();
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-expanded={all}
+      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#FFD84D] px-5 font-extrabold text-ink shadow-md shadow-[#F5BE1F]/40 transition hover:bg-[#FFCC1F] ${className}`}
+    >
+      <Images className="size-4" aria-hidden />
+      {all ? t.gallery.showLess : `${t.gallery.showAll} (+${hidden})`}
     </button>
   );
 }
@@ -63,49 +111,119 @@ function Empty({ compact }: { compact?: boolean }) {
 
 /* ================================ DESKTOP ================================ */
 
-const DESKTOP_LIMIT = 8;
-// мозаика: первая фотография крупная, остальные — разной формы
-const MOSAIC = [
-  "col-span-2 row-span-2 rounded-[2rem]",
-  "rounded-[1.5rem_1.5rem_1.5rem_0.6rem]",
-  "rounded-full",
-  "rounded-[0.6rem_1.5rem_1.5rem_1.5rem]",
-  "rounded-[1.5rem]",
-  "col-span-2 rounded-[1.5rem]",
-  "rounded-[1.5rem_0.6rem_1.5rem_1.5rem]",
-  "rounded-[0.6rem_1.5rem_1.5rem_1.5rem]",
-];
+const GAP = 16;
+type Row = { items: { item: MediaItem; index: number }[]; h: number; full: boolean };
 
-function DesktopGallery({ photos, onOpen }: { photos: string[]; onOpen: OpenFn }) {
+/** Разбивка на «выровненные ряды»: каждый ряд заполняет ширину, фото сохраняют пропорции. */
+function justify(items: MediaItem[], width: number, target: number): Row[] {
+  const rows: Row[] = [];
+  let cur: Row["items"] = [];
+  let sum = 0;
+  items.forEach((item, index) => {
+    cur.push({ item, index });
+    sum += item.w / item.h;
+    const h = (width - GAP * (cur.length - 1)) / sum;
+    if (h <= target) {
+      rows.push({ items: cur, h, full: true });
+      cur = [];
+      sum = 0;
+    }
+  });
+  if (cur.length) {
+    // последний неполный ряд растягиваем на всю ширину, если фото станут не слишком крупными
+    const h = (width - GAP * (cur.length - 1)) / sum;
+    rows.push(h <= target * 1.4 ? { items: cur, h, full: true } : { items: cur, h: target, full: false });
+  }
+  return rows;
+}
+
+const height = (rows: Row[]) => rows.reduce((a, r) => a + r.h, 0) + GAP * Math.max(0, rows.length - 1);
+
+/**
+ * Подбираем высоту рядов так, чтобы галерея поместилась в экран ноутбука.
+ * Если все фото не помещаются даже при минимальной высоте ряда — часть прячем под кнопку.
+ */
+function planDesktop(items: MediaItem[], width: number, avail: number) {
+  for (let target = 240; target >= 125; target -= 5) {
+    const rows = justify(items, width, target);
+    if (height(rows) <= avail) return { target, count: items.length };
+  }
+  const target = 140;
+  const rows = justify(items, width, target);
+  let count = 0;
+  let used = 0;
+  for (const r of rows) {
+    if (used + r.h > avail - 56) break; // место под кнопку «Показать ещё»
+    used += r.h + GAP;
+    count += r.items.length;
+  }
+  return { target, count: Math.max(count, Math.min(4, items.length)) };
+}
+
+function DesktopGallery({ photos, onOpen }: { photos: MediaItem[]; onOpen: OpenFn }) {
   const { t } = useLang();
-  const [all, setAll] = useState(false);
-  const shown = all ? photos : photos.slice(0, DESKTOP_LIMIT);
+  const rootRef = useRef<HTMLDivElement>(null);
+  // по умолчанию (до замера экрана) — ноутбук 1366×768
+  const [plan, setPlan] = useState(() => ({ width: 1176, ...planDesktop(photos, 1176, 330) }));
+  const { all, toggle, listRef, count, hidden } = useReveal(photos.length, plan.count);
+
+  useEffect(() => {
+    const measure = () => {
+      const list = listRef.current;
+      const root = rootRef.current;
+      if (!list || !root || !list.clientWidth) return; // скрыто на телефоне
+      const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 68;
+      const offset = list.getBoundingClientRect().top - root.getBoundingClientRect().top;
+      const bottom = 48 + 40; // нижний отступ + волна
+      const avail = window.innerHeight - header - offset - bottom;
+      setPlan({ width: list.clientWidth, ...planDesktop(photos, list.clientWidth, Math.max(260, avail)) });
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [photos, listRef]);
+
+  const rows = justify(photos.slice(0, count), plan.width, plan.target);
+
   return (
-    <div className="screen relative flex flex-col justify-center bg-[linear-gradient(180deg,#F1EAFF_0%,#FFFDF7_100%)]">
-      <Cloud className="absolute right-[6%] top-10 w-28 animate-drift" />
-      <Star className="absolute left-[8%] top-20 size-7 animate-twinkle" color="#B49AF0" />
-      <div className="relative mx-auto w-full max-w-[1240px] px-8 py-14 short:py-6">
+    <div ref={rootRef} className="screen relative flex flex-col justify-center bg-[linear-gradient(180deg,#F1EAFF_0%,#FFFDF7_70%,#FFF8E1_100%)]">
+      <Cloud className="absolute right-[5%] top-8 w-24 animate-drift" />
+      <Star className="absolute left-[3%] top-24 size-6 animate-twinkle" color="#FFD84D" />
+      <div className="relative mx-auto w-full max-w-[1240px] px-8 py-12 short:py-6">
         <div className="flex items-end justify-between gap-8">
           <Heading eyebrow={t.gallery.eyebrow} title={t.gallery.title} text={t.gallery.text} accent="#7545CB" />
-          {photos.length > DESKTOP_LIMIT && (
-            <button
-              type="button"
-              onClick={() => setAll((v) => !v)}
-              aria-expanded={all}
-              className="mb-2 shrink-0 rounded-full bg-white px-5 py-2.5 font-extrabold shadow-md ring-2 ring-sky hover:ring-sky-deep"
-            >
-              {all ? t.gallery.showLess : `${t.gallery.showAll} (${photos.length})`}
-            </button>
-          )}
+          {hidden > 0 && <MoreButton all={all} hidden={hidden} onClick={toggle} className="mb-2 shrink-0" />}
         </div>
-        <div className="mt-8 short:mt-6">
+        <div className="mt-7 short:mt-5">
           {photos.length === 0 ? (
             <Empty />
           ) : (
-            <div className="grid grid-flow-dense auto-rows-[clamp(110px,17svh,180px)] grid-cols-4 gap-4 short:auto-rows-[clamp(110px,16svh,150px)]">
-              {shown.map((src, i) => (
-                <Thumb key={src} src={src} index={i} onOpen={onOpen} className={all && i >= DESKTOP_LIMIT ? "rounded-[1.5rem]" : MOSAIC[i]} eager={i < 3} />
-              ))}
+            /* «Выровненные ряды»: ширина каждого фото пропорциональна его соотношению сторон,
+               поэтому снимки не обрезаются и не растягиваются. */
+            <div ref={listRef} className="flex flex-col gap-4">
+              {rows.map((row, ri) => {
+                const sum = row.items.reduce((a, { item }) => a + item.w / item.h, 0);
+                const rowWidth = row.full ? "100%" : `${Math.round(row.h * sum + GAP * (row.items.length - 1))}px`;
+                return (
+                  <div key={ri} className="flex max-w-full gap-4" style={{ width: rowWidth }}>
+                    {row.items.map(({ item, index }) => {
+                      const r = item.w / item.h;
+                      return (
+                        <Thumb
+                          key={item.original}
+                          item={item}
+                          index={index}
+                          onOpen={onOpen}
+                          eager={index < 4}
+                          sizes={`${Math.round(r * row.h)}px`}
+                          className="min-w-0"
+                          style={{ flex: `${r} 1 0` }}
+                        />
+                      );
+                    })}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
@@ -119,13 +237,12 @@ function DesktopGallery({ photos, onOpen }: { photos: string[]; onOpen: OpenFn }
 
 const MOBILE_LIMIT = 6;
 
-function MobileGallery({ photos, onOpen }: { photos: string[]; onOpen: OpenFn }) {
+function MobileGallery({ photos, onOpen }: { photos: MediaItem[]; onOpen: OpenFn }) {
   const { t } = useLang();
-  const [all, setAll] = useState(false);
-  const shown = all ? photos : photos.slice(0, MOBILE_LIMIT);
+  const { all, toggle, listRef, count, hidden } = useReveal(photos.length, MOBILE_LIMIT);
   return (
     <div className="relative bg-[linear-gradient(180deg,#F1EAFF_0%,#FFFDF7_100%)]">
-      <Flower className="absolute right-4 top-8 size-8" petal="#9C7BE3" />
+      <Flower className="absolute right-4 top-8 size-8" petal="#FFD84D" center="#7545CB" />
       <div className="mx-auto max-w-xl px-4 pb-8 pt-10 md:max-w-3xl md:px-8">
         <Heading size="mobile" eyebrow={t.gallery.eyebrow} title={t.gallery.title} text={t.gallery.text} accent="#7545CB" />
         <div className="mt-6">
@@ -133,28 +250,21 @@ function MobileGallery({ photos, onOpen }: { photos: string[]; onOpen: OpenFn })
             <Empty compact />
           ) : (
             <>
-              <div className="grid grid-cols-2 gap-2.5 md:grid-cols-3 md:gap-3">
-                {shown.map((src, i) => (
+              {/* кладка в 2 колонки (на планшете — 3): каждое фото в своих пропорциях */}
+              <div ref={listRef} className="columns-2 gap-3 md:columns-3">
+                {photos.slice(0, count).map((item, i) => (
                   <Thumb
-                    key={src}
-                    src={src}
+                    key={item.original}
+                    item={item}
                     index={i}
                     onOpen={onOpen}
                     eager={i < 2}
-                    className={i === 0 ? "col-span-2 aspect-[16/10] rounded-[1.5rem] md:col-span-2 md:row-span-2 md:aspect-auto" : "aspect-square rounded-[1.25rem]"}
+                    sizes="(min-width: 768px) 32vw, 48vw"
+                    className="mb-3 w-full break-inside-avoid"
                   />
                 ))}
               </div>
-              {photos.length > MOBILE_LIMIT && (
-                <button
-                  type="button"
-                  onClick={() => setAll((v) => !v)}
-                  aria-expanded={all}
-                  className="mt-4 flex min-h-12 w-full items-center justify-center rounded-2xl bg-white font-extrabold shadow-sm ring-2 ring-sky"
-                >
-                  {all ? t.gallery.showLess : `${t.gallery.showAll} (${photos.length})`}
-                </button>
-              )}
+              {hidden > 0 && <MoreButton all={all} hidden={hidden} onClick={toggle} className="mt-2 w-full min-h-12 rounded-2xl" />}
             </>
           )}
         </div>
@@ -166,7 +276,7 @@ function MobileGallery({ photos, onOpen }: { photos: string[]; onOpen: OpenFn })
 
 /* =============================== LIGHTBOX ================================ */
 
-function Lightbox({ photos, index, onClose, onIndex }: { photos: string[]; index: number; onClose: () => void; onIndex: (i: number) => void }) {
+function Lightbox({ photos, index, onClose, onIndex }: { photos: MediaItem[]; index: number; onClose: () => void; onIndex: (i: number) => void }) {
   const { t } = useLang();
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -211,9 +321,9 @@ function Lightbox({ photos, index, onClose, onIndex }: { photos: string[]; index
   // предзагрузка соседних фотографий
   useEffect(() => {
     if (n < 2) return;
-    [photos[(index + 1) % n], photos[(index - 1 + n) % n]].forEach((s) => {
+    [photos[(index + 1) % n], photos[(index - 1 + n) % n]].forEach((p) => {
       const img = new Image();
-      img.src = asset(s);
+      img.src = asset(p.full);
     });
   }, [index, n, photos]);
 
@@ -245,7 +355,14 @@ function Lightbox({ photos, index, onClose, onIndex }: { photos: string[]; index
       </div>
       <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 py-3 sm:px-20" onClick={(e) => e.target === e.currentTarget && onClose()}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img key={photos[index]} src={asset(photos[index])} alt={`${t.gallery.photo} ${index + 1}`} className="max-h-full max-w-full rounded-2xl object-contain shadow-2xl" />
+        <img
+          key={photos[index].original}
+          src={asset(photos[index].full)}
+          width={photos[index].w}
+          height={photos[index].h}
+          alt={`${t.gallery.photo} ${index + 1}`}
+          className="h-auto max-h-full w-auto max-w-full rounded-2xl object-contain shadow-2xl ring-4 ring-[#B49AF0]/40"
+        />
         {n > 1 && (
           <>
             <button type="button" onClick={prev} aria-label={t.gallery.prev} className="absolute left-2 top-1/2 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-white/15 text-white hover:bg-white/25 sm:grid">
@@ -257,6 +374,24 @@ function Lightbox({ photos, index, onClose, onIndex }: { photos: string[]; index
           </>
         )}
       </div>
+      {n > 1 && (
+        <div className="no-scrollbar mx-auto hidden max-w-full gap-2 overflow-x-auto px-4 pb-4 sm:flex">
+          {photos.map((p, i) => (
+            <button
+              key={p.original}
+              type="button"
+              onClick={() => onIndex(i)}
+              aria-label={`${t.gallery.photo} ${i + 1}`}
+              aria-current={i === index ? "true" : undefined}
+              className={`h-14 shrink-0 overflow-hidden rounded-xl ring-2 transition ${i === index ? "opacity-100 ring-[#FFD84D]" : "opacity-55 ring-transparent hover:opacity-90"}`}
+              style={{ aspectRatio: `${p.w} / ${p.h}` }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={asset(p.thumb)} alt="" loading="lazy" className="size-full object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
       {n > 1 && (
         <div className="flex justify-center gap-4 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:hidden">
           <button type="button" onClick={prev} aria-label={t.gallery.prev} className="grid size-14 place-items-center rounded-full bg-white/15 text-white">
@@ -271,7 +406,7 @@ function Lightbox({ photos, index, onClose, onIndex }: { photos: string[]; index
   );
 }
 
-export function Gallery({ photos }: { photos: string[] }) {
+export function Gallery({ photos }: { photos: MediaItem[] }) {
   const { t } = useLang();
   const [open, setOpen] = useState<number | null>(null);
   const close = useCallback(() => setOpen(null), []);

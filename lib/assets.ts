@@ -1,26 +1,27 @@
 import "server-only";
 import fs from "node:fs";
 import path from "node:path";
+import type { MediaItem } from "./media";
 
 /**
- * Проверка файлов в public/ во время сборки (статический экспорт).
- * Если файла нет — ссылка на него не создаётся, вместо него показывается заглушка.
+ * Медиафайлы сайта — определяются во время сборки (статический экспорт), не в браузере.
+ * Основной источник — манифест lib/generated/media.json, который создаёт
+ * scripts/build-media.mjs (размеры, WebP-превью, удаление дубликатов).
+ * Если манифеста нет, используется простой поиск файлов в public/.
  */
-const PUBLIC = path.join(process.cwd(), "public");
+const ROOT = process.cwd();
+const PUBLIC = path.join(ROOT, "public");
+const MANIFEST = path.join(ROOT, "lib", "generated", "media.json");
 const IMAGE_RE = /\.(jpe?g|png|webp)$/i;
 
-function exists(rel: string): string | null {
-  return fs.existsSync(path.join(PUBLIC, rel)) ? `/${rel}` : null;
-}
-
-/** Первый существующий файл из списка вариантов (например, main-page2.png / .jpg / .mp4). */
-function firstExisting(base: string, exts: string[]): string | null {
-  for (const e of exts) {
-    const hit = exists(`${base}.${e}`);
-    if (hit) return hit;
-  }
-  return null;
-}
+export type SiteAssets = {
+  hero: MediaItem | null;
+  about: MediaItem | null;
+  aboutVideo: string | null;
+  logo: string | null;
+  gallery: MediaItem[];
+  pdfs: string[];
+};
 
 function listDir(rel: string, re: RegExp): string[] {
   const dir = path.join(PUBLIC, rel);
@@ -32,23 +33,34 @@ function listDir(rel: string, re: RegExp): string[] {
     .map((f) => `/${rel}/${f}`);
 }
 
-export type SiteAssets = {
-  hero: string | null;
-  about: string | null;
-  /** main-page2 в виде видео (mp4/webm), если оно есть. */
-  aboutVideo: string | null;
-  logo: string | null;
-  gallery: string[];
-  pdfs: string[];
-};
+const plain = (src: string): MediaItem => ({ original: src, thumb: src, full: src, w: 4, h: 3, thumbW: 1600, fullW: 1600 });
+
+function fallback(): Omit<SiteAssets, "pdfs"> {
+  const find = (base: string, exts: string[]) => {
+    for (const dir of ["images", "images/gallery"])
+      for (const e of exts) if (fs.existsSync(path.join(PUBLIC, dir, `${base}.${e}`))) return `/${dir}/${base}.${e}`;
+    return null;
+  };
+  const img = ["png", "webp", "jpg", "jpeg"];
+  const hero = find("main-page", img);
+  const about = find("main-page2", img);
+  return {
+    hero: hero ? plain(hero) : null,
+    about: about ? plain(about) : null,
+    aboutVideo: find("main-page2", ["mp4", "webm"]),
+    logo: find("logo", img),
+    gallery: listDir("images/gallery", IMAGE_RE)
+      .filter((f) => !/\/(main-page2?|logo)\.[a-z]+$/i.test(f))
+      .map(plain),
+  };
+}
 
 export function getAssets(): SiteAssets {
-  return {
-    hero: firstExisting("images/main-page", ["png", "webp", "jpg", "jpeg"]),
-    about: firstExisting("images/main-page2", ["png", "webp", "jpg", "jpeg"]),
-    aboutVideo: firstExisting("images/main-page2", ["mp4", "webm"]),
-    logo: exists("images/logo.png"),
-    gallery: listDir("images/gallery", IMAGE_RE),
-    pdfs: listDir("documents", /\.pdf$/i),
-  };
+  let media: Omit<SiteAssets, "pdfs">;
+  try {
+    media = JSON.parse(fs.readFileSync(MANIFEST, "utf8"));
+  } catch {
+    media = fallback();
+  }
+  return { ...media, pdfs: listDir("documents", /\.pdf$/i) };
 }

@@ -4,14 +4,26 @@ import { Baby, Clock, Languages, Users, Utensils } from "lucide-react";
 import { useLang } from "../LanguageProvider";
 import { Heading } from "../ui/Heading";
 import { Cloud, Dots, Flower, Star, Wave } from "../ui/Decor";
-import { SmartImage } from "../ui/SmartImage";
+import { PhotoFrame } from "../ui/SmartImage";
+import type { MediaItem } from "@/lib/media";
 import { Responsive } from "../ui/Responsive";
 import { VideoPlayer } from "../ui/VideoPlayer";
 
-function AboutMedia({ image, video }: { image: string | null; video: string | null }) {
+type MediaProps = { image: MediaItem | null; video: string | null; maxHeight?: string; align?: "center" | "start"; sizes: string; shape: "wave" | "leaf" | "soft"; tone: "purple" | "yellow" };
+
+/** Фото (или видео main-page2) в декоративной рамке с реальными пропорциями. */
+function AboutMedia({ image, video, maxHeight, sizes, shape, tone, align }: MediaProps) {
   const { t } = useLang();
-  if (video && !image) return <VideoPlayer src={video} label={t.about.imageAlt} />;
-  return <SmartImage src={image} alt={t.about.imageAlt} className="size-full" fallbackClassName="size-full" />;
+  if (video && !image) {
+    return (
+      <div className="relative mx-auto aspect-video overflow-hidden rounded-[2rem_0.9rem_2rem_0.9rem] bg-gradient-to-br from-[#7545CB] to-[#FFD84D] p-[6px]" style={{ width: maxHeight ? `min(100%, calc(${maxHeight} * 16 / 9))` : "100%" }}>
+        <div className="size-full overflow-hidden rounded-[1.7rem_0.7rem_1.7rem_0.7rem] bg-white">
+          <VideoPlayer src={video} label={t.about.imageAlt} />
+        </div>
+      </div>
+    );
+  }
+  return <PhotoFrame item={image} alt={t.about.imageAlt} maxHeight={maxHeight} sizes={sizes} shape={shape} tone={tone} align={align} />;
 }
 
 const ICONS = [Users, Languages, Baby, Utensils, Clock];
@@ -33,7 +45,7 @@ const SHAPES = [
 
 /* ================================ DESKTOP ================================ */
 
-function DesktopAbout({ image, video }: { image: string | null; video: string | null }) {
+function DesktopAbout({ image, video }: { image: MediaItem | null; video: string | null }) {
   const { t } = useLang();
   const f = t.about.features;
   return (
@@ -41,21 +53,15 @@ function DesktopAbout({ image, video }: { image: string | null; video: string | 
       <Cloud className="absolute right-[4%] top-10 w-24 animate-drift" />
       <Dots className="absolute bottom-20 left-6 size-16" />
       <div className="relative mx-auto grid w-full max-w-[1240px] grid-cols-[0.9fr_1.1fr] items-center gap-12 px-8 py-14 short:py-8 xl:gap-16">
-        {/* фото-арка + заголовок */}
-        <div className="grid grid-cols-[minmax(0,200px)_1fr] items-end gap-6 xl:grid-cols-[minmax(0,230px)_1fr]">
-          <div className="relative">
-            <div className="arch aspect-[3/4] w-full overflow-hidden bg-gradient-to-b from-mint to-sky p-2 shadow-lg short:max-h-[300px]">
-              <div className="arch flex size-full items-center justify-center overflow-hidden bg-white/70">
-                <AboutMedia image={image} video={video} />
-              </div>
-            </div>
-            <Flower className="absolute -bottom-3 -right-3 size-10" petal="#FFC94D" />
-            <Star className="absolute -left-2 top-6 size-7 animate-twinkle" color="#B49AF0" />
+        {/* заголовок, фото и текст */}
+        <div>
+          <Heading eyebrow={t.about.eyebrow} title={t.about.title} accent="#8B63D9" />
+          <div className="relative mt-6 pb-3 pr-3 short:mt-4">
+            <AboutMedia image={image} video={video} maxHeight="clamp(180px, 35svh, 330px)" align="start" sizes="(min-width: 1280px) 520px, 40vw" shape="leaf" tone="yellow" />
+            <Flower className="absolute -bottom-1 left-2 size-9" petal="#FFC94D" />
+            <Star className="absolute -top-3 right-6 size-7 animate-twinkle" color="#B49AF0" />
           </div>
-          <div className="self-center">
-            <Heading eyebrow={t.about.eyebrow} title={t.about.title} accent="#8B63D9" />
-          </div>
-          <p className="col-span-2 max-w-xl text-[1.05rem] leading-relaxed text-ink-soft short:text-base">
+          <p className="mt-5 max-w-xl text-[1.05rem] leading-relaxed text-ink-soft short:mt-3 short:text-[15px]">
             {t.about.text}
           </p>
         </div>
@@ -92,23 +98,19 @@ function DesktopAbout({ image, video }: { image: string | null; video: string | 
 
 /* ================================ MOBILE ================================= */
 
-function MobileAbout({ image, video }: { image: string | null; video: string | null }) {
+function MobileAbout({ image, video }: { image: MediaItem | null; video: string | null }) {
   const { t } = useLang();
   return (
     <div className="relative bg-[linear-gradient(180deg,#F5F0FF_0%,#FFFDF7_100%)]">
       <div className="mx-auto max-w-xl px-4 pb-8 pt-10 md:max-w-3xl md:px-8">
         <Heading size="mobile" eyebrow={t.about.eyebrow} title={t.about.title} accent="#8B63D9" />
 
-        <div className="mt-5 flex items-start gap-4">
-          <div className="relative w-[38%] max-w-[170px] shrink-0">
-            <div className="blob-b aspect-square overflow-hidden bg-gradient-to-br from-mint to-sky p-1.5 shadow-md">
-              <div className="blob-b flex size-full items-center justify-center overflow-hidden bg-white/70">
-                <AboutMedia image={image} video={video} />
-              </div>
-            </div>
-            <Star className="absolute -right-1 -top-1 size-6 animate-twinkle" color="#B49AF0" />
+        <div className="mt-5 md:grid md:grid-cols-[1fr_1fr] md:items-center md:gap-6">
+          <div className="relative pb-3 pr-3">
+            <AboutMedia image={image} video={video} sizes="(min-width: 768px) 45vw, 92vw" shape="wave" tone="purple" />
+            <Star className="absolute -left-1 -top-2 size-6 animate-twinkle" color="#FFD84D" />
           </div>
-          <p className="min-w-0 text-[15px] leading-relaxed text-ink-soft">{t.about.text}</p>
+          <p className="mt-4 text-[15px] leading-relaxed text-ink-soft md:mt-0">{t.about.text}</p>
         </div>
 
         {/* вертикальная «дорожка» характеристик */}
@@ -135,7 +137,7 @@ function MobileAbout({ image, video }: { image: string | null; video: string | n
   );
 }
 
-export function About({ image, video = null }: { image: string | null; video?: string | null }) {
+export function About({ image, video = null }: { image: MediaItem | null; video?: string | null }) {
   const { t } = useLang();
   return (
     <section id="about" aria-label={t.about.eyebrow} className="relative overflow-x-clip">

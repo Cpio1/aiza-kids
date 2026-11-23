@@ -6,3 +6,7 @@ next-env.d.ts
 .DS_Store
 .env*.local
 .vercel
+
+# генерируются при сборке (scripts/build-media.mjs)
+public/images/_optimized/
+lib/generated/

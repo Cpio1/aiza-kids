@@ -20,7 +20,7 @@ const DESCRIPTION =
 export function generateMetadata(): Metadata {
   const { logo, hero } = getAssets();
   const icon = logo ? `${BASE_PATH}${logo}` : `${BASE_PATH}/favicon.svg`;
-  const ogImage = hero || logo;
+  const ogImage = hero?.thumb || logo;
   return {
     metadataBase: new URL(SITE_URL),
     title: TITLE,

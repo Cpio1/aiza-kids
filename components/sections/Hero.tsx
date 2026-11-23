@@ -5,7 +5,8 @@ import { SITE } from "@/lib/content";
 import { useLang } from "../LanguageProvider";
 import { WhatsAppIcon } from "../ui/BrandIcons";
 import { Cloud, Flower, Rainbow, Sparkle, Star, Sun, Wave } from "../ui/Decor";
-import { SmartImage } from "../ui/SmartImage";
+import { PhotoFrame } from "../ui/SmartImage";
+import type { MediaItem } from "@/lib/media";
 import { Responsive } from "../ui/Responsive";
 
 const FACT_ICONS = [Users, Baby, Languages, Clock];
@@ -35,7 +36,7 @@ function Title({ className = "" }: { className?: string }) {
 
 /* ================================ DESKTOP ================================ */
 
-function DesktopHero({ image }: { image: string | null }) {
+function DesktopHero({ image }: { image: MediaItem | null }) {
   const { t } = useLang();
   return (
     <div className="screen relative flex flex-col">
@@ -46,7 +47,7 @@ function DesktopHero({ image }: { image: string | null }) {
       <Star className="absolute left-[44%] top-[14%] size-6 animate-twinkle" color="#B49AF0" />
       <Flower className="absolute bottom-16 left-[2%] size-10 animate-float-slow" />
 
-      <div className="relative mx-auto grid w-full max-w-[1240px] flex-1 grid-cols-[1.05fr_1fr] items-center gap-10 px-8 py-10 short:py-6 xl:gap-14">
+      <div className="relative mx-auto grid w-full max-w-[1240px] flex-1 grid-cols-[1fr_1.05fr] items-center gap-10 px-8 py-10 short:py-6 xl:gap-14">
         {/* текст */}
         <div>
           <p className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-sm font-extrabold text-ink-soft shadow-sm ring-1 ring-ink/5">
@@ -94,15 +95,20 @@ function DesktopHero({ image }: { image: string | null }) {
         </div>
 
         {/* изображение */}
-        <div className="relative mx-auto flex w-full max-w-[540px] items-center justify-center">
-          <Rainbow className="absolute -top-4 left-1/2 w-[86%] -translate-x-1/2 opacity-80" />
-          <div className="blob-a relative aspect-square h-[min(56svh,480px)] max-w-full bg-gradient-to-br from-sky via-white to-rose p-3 shadow-[0_30px_60px_-25px_rgba(48,35,71,.35)]">
-            <div className="blob-a flex size-full items-center justify-center overflow-hidden bg-white/60">
-              <SmartImage src={image} alt={t.hero.imageAlt} priority className="size-full" fallbackClassName="size-full" />
-            </div>
-          </div>
-          <Sun className="absolute -right-3 -top-6 size-24 animate-float" />
-          <div className="absolute -left-6 bottom-[12%] flex items-center gap-2.5 rounded-2xl bg-white px-4 py-3 shadow-lg ring-1 ring-ink/5 animate-float-slow">
+        <div className="relative mx-auto flex w-full max-w-[620px] items-center justify-center py-6">
+          <Rainbow className="absolute -left-6 top-0 w-36 -rotate-12 opacity-80" />
+          <PhotoFrame
+            item={image}
+            alt={t.hero.imageAlt}
+            fallbackRatio={1.2}
+            maxHeight="min(52svh, 440px)"
+            shape="wave"
+            tone="purple"
+            priority
+            sizes="(min-width: 1280px) 620px, 48vw"
+          />
+          <Sun className="absolute -right-6 -top-4 size-16 animate-float" />
+          <div className="absolute -bottom-3 -left-4 flex items-center gap-2.5 rounded-2xl bg-white px-4 py-3 shadow-lg ring-1 ring-ink/5 animate-float-slow">
             <span className="grid size-10 place-items-center rounded-xl bg-sun">
               <Clock className="size-5" aria-hidden />
             </span>
@@ -122,7 +128,7 @@ function DesktopHero({ image }: { image: string | null }) {
 
 /* ================================ MOBILE ================================= */
 
-function MobileHero({ image }: { image: string | null }) {
+function MobileHero({ image }: { image: MediaItem | null }) {
   const { t } = useLang();
   return (
     <div className="relative overflow-hidden bg-[linear-gradient(180deg,#FFF6CC_0%,#FFFDF7_45%,#EFE7FF_100%)]">
@@ -138,15 +144,18 @@ function MobileHero({ image }: { image: string | null }) {
 
         <div className="md:mt-2 md:grid md:grid-cols-[1fr_1fr] md:items-center md:gap-8">
           {/* изображение в «окошке» с радугой */}
-          <div className="relative mx-auto mt-6 w-full max-w-[290px] min-[390px]:max-w-[320px] md:order-2 md:max-w-[340px] md:mt-4">
-            <Rainbow className="absolute -top-5 left-1/2 w-[78%] -translate-x-1/2" />
-            <div className="arch relative aspect-[4/4.2] w-full overflow-hidden bg-gradient-to-b from-sky to-rose p-2.5 shadow-[0_20px_40px_-20px_rgba(48,35,71,.4)]">
-              <div className="arch flex size-full items-center justify-center overflow-hidden bg-white/60">
-                <SmartImage src={image} alt={t.hero.imageAlt} priority className="size-full" fallbackClassName="size-full" />
-              </div>
-            </div>
-            <Flower className="absolute -bottom-3 -left-2 size-10" />
-            <Star className="absolute -right-1 bottom-8 size-7 animate-twinkle" color="#B49AF0" />
+          <div className="relative mx-auto mt-6 w-full pb-3 pr-3 md:order-2 md:mt-4">
+            <PhotoFrame
+              item={image}
+              alt={t.hero.imageAlt}
+              fallbackRatio={1.1}
+              shape="leaf"
+              tone="yellow"
+              priority
+              sizes="(min-width: 768px) 45vw, 92vw"
+            />
+            <Flower className="absolute -bottom-2 -left-2 size-9" />
+            <Star className="absolute -right-1 -top-3 size-7 animate-twinkle" color="#B49AF0" />
           </div>
 
           <div className="md:order-1">
@@ -192,7 +201,7 @@ function MobileHero({ image }: { image: string | null }) {
   );
 }
 
-export function Hero({ image }: { image: string | null }) {
+export function Hero({ image }: { image: MediaItem | null }) {
   const { t } = useLang();
   return (
     <section id="home" aria-label={t.shortName} className="relative overflow-x-clip pt-[var(--header-h)]">

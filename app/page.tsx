@@ -37,7 +37,7 @@ export default function Page() {
       <Header logo={assets.logo} />
       <main>
         <Hero image={assets.hero} />
-        <About image={assets.about ?? (assets.aboutVideo ? null : assets.hero)} video={assets.aboutVideo} />
+        <About image={assets.about} video={assets.aboutVideo} />
         <Groups />
         <Nutrition />
         <Gallery photos={assets.gallery} />
