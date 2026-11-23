@@ -9,10 +9,10 @@ import { MealArt } from "../ui/MealArt";
 import { Responsive } from "../ui/Responsive";
 
 const TONE: Record<string, { bg: string; ring: string; num: string }> = {
-  yellow: { bg: "bg-sun", ring: "#FFE58A", num: "#E6A400" },
-  mint: { bg: "bg-mint", ring: "#9BE6AC", num: "#24924A" },
-  peach: { bg: "bg-peach", ring: "#FFC196", num: "#E2702E" },
-  pink: { bg: "bg-rose", ring: "#FFB0CB", num: "#D6457A" },
+  yellow: { bg: "bg-sun", ring: "#FFE47A", num: "#8A6200" },
+  mint: { bg: "bg-mint", ring: "#D3C2F8", num: "#5E34AE" },
+  peach: { bg: "bg-peach", ring: "#FFE08A", num: "#8A6200" },
+  pink: { bg: "bg-rose", ring: "#E3C8F7", num: "#8A3FB8" },
 };
 
 /* ================================ DESKTOP ================================ */
@@ -20,16 +20,16 @@ const TONE: Record<string, { bg: string; ring: string; num: string }> = {
 function DesktopNutrition() {
   const { t, lang } = useLang();
   return (
-    <div className="screen relative flex flex-col justify-center bg-[radial-gradient(ellipse_at_50%_0%,#FFE7D2_0%,transparent_60%),linear-gradient(180deg,#FFF4EA_0%,#FFFDF5_100%)]">
+    <div className="screen relative flex flex-col justify-center bg-[radial-gradient(ellipse_at_50%_0%,#FFE7D2_0%,transparent_60%),linear-gradient(180deg,#FFF8E6_0%,#FFFDF7_100%)]">
       <Cloud className="absolute left-[6%] top-12 w-24 animate-drift" />
-      <Flower className="absolute right-[5%] top-16 size-10 animate-float-slow" petal="#FFB27A" />
+      <Flower className="absolute right-[5%] top-16 size-10 animate-float-slow" petal="#FFC94D" />
       <div className="relative mx-auto w-full max-w-[1240px] px-8 py-14 short:py-8">
-        <Heading align="center" eyebrow={t.nutrition.eyebrow} title={t.nutrition.title} text={t.nutrition.text} accent="#FF9A5A" />
+        <Heading align="center" eyebrow={t.nutrition.eyebrow} title={t.nutrition.title} text={t.nutrition.text} accent="#E8A317" />
 
         {/* «день» — волнистая линия соединяет четыре тарелки */}
         <div className="relative mt-12 short:mt-5">
           <svg aria-hidden viewBox="0 0 1000 120" preserveAspectRatio="none" className="pointer-events-none absolute inset-x-[8%] top-[64px] h-24 w-[84%] short:top-[52px]">
-            <path d="M0 60C125 0 250 0 333 60s208 60 333 0 250-60 334 0" fill="none" stroke="#FFB27A" strokeWidth="4" strokeDasharray="2 14" strokeLinecap="round" />
+            <path d="M0 60C125 0 250 0 333 60s208 60 333 0 250-60 334 0" fill="none" stroke="#FFC94D" strokeWidth="4" strokeDasharray="2 14" strokeLinecap="round" />
           </svg>
           <ol className="relative grid grid-cols-4 gap-6">
             {MEALS.map((m, i) => {
@@ -37,13 +37,13 @@ function DesktopNutrition() {
               return (
                 <li key={m.kind} className={`flex flex-col items-center text-center ${i % 2 ? "pt-8 short:pt-6" : ""}`}>
                   <div className="relative">
-                    <div className="grid size-[9.5rem] place-items-center rounded-full shadow-[0_20px_40px_-22px_rgba(41,54,74,.55)] short:size-[7.5rem] xl:size-[10.5rem] short:xl:size-[8rem]" style={{ background: tone.ring }}>
+                    <div className="grid size-[9.5rem] place-items-center rounded-full shadow-[0_20px_40px_-22px_rgba(48,35,71,.55)] short:size-[7.5rem] xl:size-[10.5rem] short:xl:size-[8rem]" style={{ background: tone.ring }}>
                       <MealArt kind={m.kind} className="size-[88%] transition duration-500 hover:rotate-6" />
                     </div>
                     <span className="absolute -left-1 top-1 grid size-10 place-items-center rounded-full bg-white border-[3px] text-lg font-black shadow-md" style={{ color: tone.num, borderColor: tone.ring }}>
                       {i + 1}
                     </span>
-                    {i === 1 && <Sparkle className="absolute -right-2 top-2 size-5 animate-twinkle" color="#FFC93C" />}
+                    {i === 1 && <Sparkle className="absolute -right-2 top-2 size-5 animate-twinkle" color="#FFD84D" />}
                   </div>
                   <div className={`relative -mt-4 w-full max-w-[250px] ${tone.bg} min-h-[8.5rem] rounded-[1.75rem] px-4 pb-4 pt-7 shadow-sm short:min-h-[7.5rem] ring-1 ring-white short:pb-3`}>
                     <h3 className="text-[1.2rem] font-black leading-tight">{m.title[lang]}</h3>
@@ -60,7 +60,7 @@ function DesktopNutrition() {
           {t.nutrition.note}
         </p>
       </div>
-      <Wave fill="#EAF8FF" className="relative -mb-px h-10" />
+      <Wave fill="#F1EAFF" className="relative -mb-px h-10" />
     </div>
   );
 }
@@ -70,14 +70,14 @@ function DesktopNutrition() {
 function MobileNutrition() {
   const { t, lang } = useLang();
   return (
-    <div className="relative bg-[linear-gradient(180deg,#FFF4EA_0%,#FFFDF5_100%)]">
-      <Star className="absolute right-4 top-8 size-7 animate-twinkle" color="#FFB27A" />
+    <div className="relative bg-[linear-gradient(180deg,#FFF8E6_0%,#FFFDF7_100%)]">
+      <Star className="absolute right-4 top-8 size-7 animate-twinkle" color="#FFC94D" />
       <div className="mx-auto max-w-xl px-4 pb-8 pt-10 md:max-w-3xl md:px-8">
-        <Heading size="mobile" eyebrow={t.nutrition.eyebrow} title={t.nutrition.title} text={t.nutrition.text} accent="#FF9A5A" />
+        <Heading size="mobile" eyebrow={t.nutrition.eyebrow} title={t.nutrition.title} text={t.nutrition.text} accent="#E8A317" />
 
         {/* таймлайн дня */}
         <ol className="relative mt-7 grid gap-4 md:grid-cols-2">
-          <span aria-hidden className="absolute bottom-10 left-[1.15rem] top-10 border-l-[3px] border-dotted border-[#FFB27A] md:hidden" />
+          <span aria-hidden className="absolute bottom-10 left-[1.15rem] top-10 border-l-[3px] border-dotted border-[#FFC94D] md:hidden" />
           {MEALS.map((m, i) => {
             const tone = TONE[m.tone];
             return (
@@ -110,7 +110,7 @@ function MobileNutrition() {
           {t.nutrition.note}
         </p>
       </div>
-      <Wave fill="#EAF8FF" className="h-6" />
+      <Wave fill="#F1EAFF" className="h-6" />
     </div>
   );
 }

@@ -58,12 +58,12 @@ function Empty({ compact }: { compact?: boolean }) {
     <div className={`relative overflow-hidden rounded-[2rem] bg-white/80 text-center shadow-sm ring-1 ring-ink/5 ${compact ? "px-5 py-7" : "px-10 py-10"}`}>
       <div className="relative mx-auto w-fit">
         <span className="grid size-20 place-items-center rounded-[1.6rem_1.6rem_1.6rem_0.6rem] bg-mint shadow-md">
-          <FolderOpen className="size-10 text-[#24924A]" aria-hidden />
+          <FolderOpen className="size-10 text-[#5E34AE]" aria-hidden />
         </span>
         <span className="absolute -right-6 -top-3 grid size-11 rotate-12 place-items-center rounded-xl bg-sun shadow">
           <FileText className="size-5" aria-hidden />
         </span>
-        <Sparkle className="absolute -left-5 top-0 size-5 animate-twinkle" color="#FF9DB8" />
+        <Sparkle className="absolute -left-5 top-0 size-5 animate-twinkle" color="#B49AF0" />
       </div>
       <p className={`mt-5 font-black ${compact ? "text-lg" : "text-xl"}`}>{t.documents.emptyTitle}</p>
       <p className="mx-auto mt-1.5 max-w-sm text-[15px] text-ink-soft">{t.documents.emptyText}</p>
@@ -87,13 +87,13 @@ function DesktopDocuments({ pdfs }: { pdfs: string[] }) {
   const { t } = useLang();
   const docs = useDocs(pdfs);
   return (
-    <div className="relative flex min-h-[70svh] flex-col justify-center bg-[linear-gradient(180deg,#EFFBF1_0%,#FFFDF5_100%)]">
+    <div className="relative flex min-h-[70svh] flex-col justify-center bg-[linear-gradient(180deg,#F5F0FF_0%,#FFFDF7_100%)]">
       <Dots className="absolute right-10 top-12 size-16" />
       <Cloud className="absolute bottom-16 left-[4%] w-24 animate-drift" />
       <div className="relative mx-auto grid w-full max-w-[1240px] grid-cols-[0.85fr_1.15fr] items-center gap-14 px-8 py-14 short:py-10">
         <div>
-          <Heading eyebrow={t.documents.eyebrow} title={t.documents.title} text={t.documents.text} accent="#3FBF6A" />
-          <Star className="mt-6 size-8 animate-twinkle" color="#8FE0A1" />
+          <Heading eyebrow={t.documents.eyebrow} title={t.documents.title} text={t.documents.text} accent="#8B63D9" />
+          <Star className="mt-6 size-8 animate-twinkle" color="#CDB8F7" />
         </div>
         {docs.length === 0 ? (
           <Empty />
@@ -116,9 +116,9 @@ function MobileDocuments({ pdfs }: { pdfs: string[] }) {
   const { t } = useLang();
   const docs = useDocs(pdfs);
   return (
-    <div className="relative bg-[linear-gradient(180deg,#EFFBF1_0%,#FFFDF5_100%)]">
+    <div className="relative bg-[linear-gradient(180deg,#F5F0FF_0%,#FFFDF7_100%)]">
       <div className="mx-auto max-w-xl px-4 pb-8 pt-10 md:max-w-3xl md:px-8">
-        <Heading size="mobile" eyebrow={t.documents.eyebrow} title={t.documents.title} text={t.documents.text} accent="#3FBF6A" />
+        <Heading size="mobile" eyebrow={t.documents.eyebrow} title={t.documents.title} text={t.documents.text} accent="#8B63D9" />
         <div className="mt-6">
           {docs.length === 0 ? (
             <Empty compact />

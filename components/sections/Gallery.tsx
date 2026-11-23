@@ -50,10 +50,10 @@ function Empty({ compact }: { compact?: boolean }) {
         </div>
         <div className={`absolute -right-8 top-3 rotate-[8deg] overflow-hidden rounded-2xl border-[6px] border-white bg-rose shadow-md ${compact ? "h-20 w-24" : "h-24 w-32"}`}>
           <div className="grid size-full place-items-center">
-            <Camera className="size-8 text-[#D6457A]" aria-hidden />
+            <Camera className="size-8 text-[#8A3FB8]" aria-hidden />
           </div>
         </div>
-        <Sparkle className="absolute -left-5 -top-3 size-6 animate-twinkle" color="#FFC93C" />
+        <Sparkle className="absolute -left-5 -top-3 size-6 animate-twinkle" color="#FFD84D" />
       </div>
       <p className={`mt-6 font-black ${compact ? "text-lg" : "text-xl"}`}>{t.gallery.emptyTitle}</p>
       <p className="mt-1.5 max-w-sm text-[15px] text-ink-soft">{t.gallery.emptyText}</p>
@@ -81,12 +81,12 @@ function DesktopGallery({ photos, onOpen }: { photos: string[]; onOpen: OpenFn }
   const [all, setAll] = useState(false);
   const shown = all ? photos : photos.slice(0, DESKTOP_LIMIT);
   return (
-    <div className="screen relative flex flex-col justify-center bg-[linear-gradient(180deg,#EAF8FF_0%,#FFFDF5_100%)]">
+    <div className="screen relative flex flex-col justify-center bg-[linear-gradient(180deg,#F1EAFF_0%,#FFFDF7_100%)]">
       <Cloud className="absolute right-[6%] top-10 w-28 animate-drift" />
-      <Star className="absolute left-[8%] top-20 size-7 animate-twinkle" color="#FF9DB8" />
+      <Star className="absolute left-[8%] top-20 size-7 animate-twinkle" color="#B49AF0" />
       <div className="relative mx-auto w-full max-w-[1240px] px-8 py-14 short:py-6">
         <div className="flex items-end justify-between gap-8">
-          <Heading eyebrow={t.gallery.eyebrow} title={t.gallery.title} text={t.gallery.text} accent="#3FB4EA" />
+          <Heading eyebrow={t.gallery.eyebrow} title={t.gallery.title} text={t.gallery.text} accent="#7545CB" />
           {photos.length > DESKTOP_LIMIT && (
             <button
               type="button"
@@ -110,7 +110,7 @@ function DesktopGallery({ photos, onOpen }: { photos: string[]; onOpen: OpenFn }
           )}
         </div>
       </div>
-      <Wave fill="#EFFBF1" className="relative -mb-px h-10" />
+      <Wave fill="#F5F0FF" className="relative -mb-px h-10" />
     </div>
   );
 }
@@ -124,10 +124,10 @@ function MobileGallery({ photos, onOpen }: { photos: string[]; onOpen: OpenFn })
   const [all, setAll] = useState(false);
   const shown = all ? photos : photos.slice(0, MOBILE_LIMIT);
   return (
-    <div className="relative bg-[linear-gradient(180deg,#EAF8FF_0%,#FFFDF5_100%)]">
-      <Flower className="absolute right-4 top-8 size-8" petal="#7CCFF5" />
+    <div className="relative bg-[linear-gradient(180deg,#F1EAFF_0%,#FFFDF7_100%)]">
+      <Flower className="absolute right-4 top-8 size-8" petal="#9C7BE3" />
       <div className="mx-auto max-w-xl px-4 pb-8 pt-10 md:max-w-3xl md:px-8">
-        <Heading size="mobile" eyebrow={t.gallery.eyebrow} title={t.gallery.title} text={t.gallery.text} accent="#3FB4EA" />
+        <Heading size="mobile" eyebrow={t.gallery.eyebrow} title={t.gallery.title} text={t.gallery.text} accent="#7545CB" />
         <div className="mt-6">
           {photos.length === 0 ? (
             <Empty compact />
@@ -159,7 +159,7 @@ function MobileGallery({ photos, onOpen }: { photos: string[]; onOpen: OpenFn })
           )}
         </div>
       </div>
-      <Wave fill="#EFFBF1" className="h-6" />
+      <Wave fill="#F5F0FF" className="h-6" />
     </div>
   );
 }
@@ -223,7 +223,7 @@ function Lightbox({ photos, index, onClose, onIndex }: { photos: string[]; index
       role="dialog"
       aria-modal="true"
       aria-label={t.gallery.viewer}
-      className="fixed inset-0 z-[70] flex flex-col bg-[#1d2636]/95"
+      className="fixed inset-0 z-[70] flex flex-col bg-[#231934]/95"
       onClick={(e) => e.target === e.currentTarget && onClose()}
       onTouchStart={(e) => (touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY })}
       onTouchEnd={(e) => {

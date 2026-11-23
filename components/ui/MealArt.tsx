@@ -5,7 +5,7 @@ import type { MealKind } from "@/lib/content";
 function Plate({ children, rim = "#fff", inner = "#F6F8FB" }: { children?: React.ReactNode; rim?: string; inner?: string }) {
   return (
     <>
-      <ellipse cx="60" cy="66" rx="46" ry="44" fill="#29364A" opacity=".07" />
+      <ellipse cx="60" cy="66" rx="46" ry="44" fill="#302347" opacity=".07" />
       <circle cx="60" cy="60" r="44" fill={rim} />
       <circle cx="60" cy="60" r="33" fill={inner} />
       {children}
@@ -41,19 +41,19 @@ export function MealArt({ kind, className = "" }: { kind: MealKind; className?: 
         <>
           <Plate inner="#FFF6D6" />
           {/* каша в мисочке */}
-          <path d="M34 56h52a26 22 0 0 1-52 0Z" fill="#FFB27A" />
-          <path d="M34 56h52" stroke="#FF9A5A" strokeWidth="3" strokeLinecap="round" />
-          <ellipse cx="60" cy="55" rx="24" ry="6" fill="#FFF3B0" />
-          <circle cx="52" cy="53" r="3" fill="#FF6F9F" />
-          <circle cx="62" cy="52" r="3" fill="#7CCFF5" />
-          <circle cx="69" cy="55" r="2.6" fill="#FF6F9F" />
+          <path d="M34 56h52a26 22 0 0 1-52 0Z" fill="#FFC94D" />
+          <path d="M34 56h52" stroke="#E8A317" strokeWidth="3" strokeLinecap="round" />
+          <ellipse cx="60" cy="55" rx="24" ry="6" fill="#FFF1A8" />
+          <circle cx="52" cy="53" r="3" fill="#7545CB" />
+          <circle cx="62" cy="52" r="3" fill="#9C7BE3" />
+          <circle cx="69" cy="55" r="2.6" fill="#7545CB" />
           <path d="M60 40c-3-5 3-7 0-12M68 42c-3-5 3-7 0-12" stroke="#fff" strokeWidth="2.6" fill="none" strokeLinecap="round" opacity=".9" />
           <Spoon />
         </>
       )}
       {kind === "vitamin" && (
         <>
-          <Plate inner="#EAFBEF" />
+          <Plate inner="#F3EDFF" />
           {/* яблоко */}
           <path d="M44 48c-10 0-14 10-10 20s10 12 13 10c3 2 9 0 13-10s0-20-10-20c-2 0-4 1-3 1s-1-1-3-1Z" fill="#FF6F6F" />
           <path d="M47 46c0-5 2-8 5-9" stroke="#6B4B3A" strokeWidth="2.4" fill="none" strokeLinecap="round" />
@@ -66,12 +66,12 @@ export function MealArt({ kind, className = "" }: { kind: MealKind; className?: 
           <circle cx="58" cy="80" r="4" fill="#B04CC8" />
           <circle cx="65" cy="83" r="4" fill="#8A3FB0" />
           <circle cx="60" cy="87" r="3.5" fill="#B04CC8" />
-          <path d="M84 36l3 6 6 1-5 4 1 6-5-3-5 3 1-6-5-4 6-1Z" fill="#FFC93C" />
+          <path d="M84 36l3 6 6 1-5 4 1 6-5-3-5 3 1-6-5-4 6-1Z" fill="#FFD84D" />
         </>
       )}
       {kind === "lunch" && (
         <>
-          <Plate inner="#FFEFE2" />
+          <Plate inner="#FFF4D9" />
           {/* суп */}
           <circle cx="60" cy="60" r="26" fill="#FFC27A" />
           <circle cx="60" cy="60" r="26" fill="none" stroke="#fff" strokeWidth="2" opacity=".6" />
@@ -86,10 +86,10 @@ export function MealArt({ kind, className = "" }: { kind: MealKind; className?: 
       )}
       {kind === "snack" && (
         <>
-          <Plate inner="#FFF0F5" />
+          <Plate inner="#F7F0FF" />
           {/* стакан молока */}
-          <path d="M66 34h20l-3 46a4 4 0 0 1-4 4h-6a4 4 0 0 1-4-4Z" fill="#fff" stroke="#BDEBFF" strokeWidth="2.5" />
-          <path d="M67.3 48h17.4l-2.2 31a3 3 0 0 1-3 3h-6.9a3 3 0 0 1-3-3Z" fill="#F4FAFF" />
+          <path d="M66 34h20l-3 46a4 4 0 0 1-4 4h-6a4 4 0 0 1-4-4Z" fill="#fff" stroke="#EDE4FF" strokeWidth="2.5" />
+          <path d="M67.3 48h17.4l-2.2 31a3 3 0 0 1-3 3h-6.9a3 3 0 0 1-3-3Z" fill="#F8F5FF" />
           {/* печенье */}
           <circle cx="46" cy="62" r="15" fill="#E9A863" />
           <circle cx="46" cy="62" r="15" fill="none" stroke="#C9864A" strokeWidth="2" strokeDasharray="3 3" />
@@ -99,7 +99,7 @@ export function MealArt({ kind, className = "" }: { kind: MealKind; className?: 
           <circle cx="56" cy="80" r="9" fill="#F2BE7E" />
           <circle cx="54" cy="78" r="1.8" fill="#7A4A2A" />
           <circle cx="58" cy="83" r="1.8" fill="#7A4A2A" />
-          <path d="M28 34l2.5 5 5.5.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.5-.8Z" fill="#FF9DB8" />
+          <path d="M28 34l2.5 5 5.5.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.5-.8Z" fill="#B49AF0" />
         </>
       )}
     </svg>

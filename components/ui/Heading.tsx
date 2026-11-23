@@ -11,7 +11,7 @@ type Props = {
 };
 
 /** Заголовок секции. Desktop и Mobile получают разную типографику и плотность. */
-export function Heading({ eyebrow, title, text, align = "left", size = "desktop", accent = "#FF9DB8", className = "" }: Props) {
+export function Heading({ eyebrow, title, text, align = "left", size = "desktop", accent = "#B49AF0", className = "" }: Props) {
   const center = align === "center";
   return (
     <div className={`${center ? "mx-auto text-center" : ""} ${className}`}>

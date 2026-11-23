@@ -6,11 +6,12 @@ import { Heading } from "../ui/Heading";
 import { Cloud, Flower, Rainbow, Sparkle, Star, Sun, Wave } from "../ui/Decor";
 import { Responsive } from "../ui/Responsive";
 
-const TONE: Record<GroupTone, { card: string; blob: string; deep: string; pill: string }> = {
-  yellow: { card: "from-sun to-[#FFFBE3]", blob: "#FFE58A", deep: "#E6A400", pill: "bg-[#FFE58A]" },
-  blue: { card: "from-sky to-[#EEF9FF]", blob: "#93DBFA", deep: "#1C8FC4", pill: "bg-[#A8E2FB]" },
-  mint: { card: "from-mint to-[#F0FCF2]", blob: "#9BE6AC", deep: "#24924A", pill: "bg-[#A9EAB7]" },
-  pink: { card: "from-rose to-[#FFF2F7]", blob: "#FFB0CB", deep: "#D6457A", pill: "bg-[#FFBBD2]" },
+// Чередуем жёлтый, лавандовый, фиолетовый и кремовый оттенки
+const TONE: Record<GroupTone, { card: string; blob: string; deep: string; pill: string; badgeText: string }> = {
+  yellow: { card: "from-[#FFF1A8] to-[#FFFBE3]", blob: "#FFD84D", deep: "#7A5600", pill: "bg-[#FFE47A]", badgeText: "#302347" },
+  blue: { card: "from-[#EDE4FF] to-[#F8F5FF]", blob: "#C9B3F5", deep: "#6A3BBE", pill: "bg-[#DCCDFA]", badgeText: "#302347" },
+  mint: { card: "from-[#C9B3F5] to-[#EDE4FF]", blob: "#7545CB", deep: "#4A2590", pill: "bg-white/75", badgeText: "#FFFFFF" },
+  pink: { card: "from-[#FFF3D6] to-[#FFFDF7]", blob: "#FFE9B0", deep: "#7545CB", pill: "bg-[#F1E8FF]", badgeText: "#5E34AE" },
 };
 
 // индивидуальная форма для каждой карточки
@@ -26,8 +27,8 @@ const BADGE_SHAPES = ["blob-a", "rounded-full", "blob-b", "rounded-[38%]"];
 function GroupMark({ i, className = "" }: { i: number; className?: string }) {
   const marks = [
     <Cloud key="c" className={className} />,
-    <Star key="s" className={className} color="#7CCFF5" />,
-    <Flower key="f" className={className} petal="#8FE0A1" />,
+    <Star key="s" className={className} color="#9C7BE3" />,
+    <Flower key="f" className={className} petal="#CDB8F7" />,
     <Sun key="u" className={className} face={false} />,
   ];
   return marks[i];
@@ -38,12 +39,12 @@ function GroupMark({ i, className = "" }: { i: number; className?: string }) {
 function DesktopGroups() {
   const { t, lang } = useLang();
   return (
-    <div className="screen relative flex flex-col justify-center bg-[linear-gradient(180deg,#FFF0F5_0%,#FFFDF5_70%,#FFF7EE_100%)]">
+    <div className="screen relative flex flex-col justify-center bg-[linear-gradient(180deg,#F7F0FF_0%,#FFFDF7_70%,#FFF7EE_100%)]">
       <Rainbow className="absolute -left-10 top-16 w-40 rotate-[-12deg] opacity-50" />
-      <Sparkle className="absolute right-[10%] top-14 size-6 animate-twinkle" color="#FFC93C" />
+      <Sparkle className="absolute right-[10%] top-14 size-6 animate-twinkle" color="#FFD84D" />
       <div className="relative mx-auto w-full max-w-[1240px] px-8 py-14 short:py-8">
         <div className="flex items-end justify-between gap-10">
-          <Heading eyebrow={t.groups.eyebrow} title={t.groups.title} accent="#FF6F9F" />
+          <Heading eyebrow={t.groups.eyebrow} title={t.groups.title} accent="#7545CB" />
           <p className="mb-6 max-w-sm text-right text-[1.05rem] text-ink-soft">{t.groups.text}</p>
         </div>
 
@@ -53,7 +54,7 @@ function DesktopGroups() {
             return (
               <li
                 key={g.name}
-                className={`group relative flex flex-col bg-gradient-to-b ${tone.card} ${CARD_SHAPES[i]} px-5 pb-6 pt-16 shadow-[0_18px_40px_-24px_rgba(41,54,74,.5)] ring-1 ring-white transition duration-300 hover:-translate-y-1.5 short:pb-5 short:pt-14 ${
+                className={`group relative flex flex-col bg-gradient-to-b ${tone.card} ${CARD_SHAPES[i]} px-5 pb-6 pt-16 shadow-[0_18px_40px_-24px_rgba(48,35,71,.5)] ring-1 ring-white transition duration-300 hover:-translate-y-1.5 short:pb-5 short:pt-14 ${
                   i % 2 ? "mt-6 short:mt-4" : ""
                 }`}
               >
@@ -62,7 +63,7 @@ function DesktopGroups() {
                   className={`absolute -top-9 left-1/2 grid size-[5.5rem] -translate-x-1/2 place-items-center ${BADGE_SHAPES[i]} shadow-lg ring-4 ring-white short:size-20`}
                   style={{ background: tone.blob }}
                 >
-                  <span className="text-[2rem] font-black leading-none text-ink short:text-[1.8rem]">
+                  <span className="text-[2rem] font-black leading-none short:text-[1.8rem]" style={{ color: tone.badgeText }}>
                     {g.age}
                     <span className="text-xl align-top">+</span>
                   </span>
@@ -84,7 +85,7 @@ function DesktopGroups() {
           })}
         </ul>
       </div>
-      <Wave fill="#FFF4EA" className="relative -mb-px h-10" />
+      <Wave fill="#FFF8E6" className="relative -mb-px h-10" />
     </div>
   );
 }
@@ -94,9 +95,9 @@ function DesktopGroups() {
 function MobileGroups() {
   const { t, lang } = useLang();
   return (
-    <div className="relative bg-[linear-gradient(180deg,#FFF0F5_0%,#FFFDF5_100%)]">
+    <div className="relative bg-[linear-gradient(180deg,#F7F0FF_0%,#FFFDF7_100%)]">
       <div className="mx-auto max-w-xl px-4 pb-8 pt-10 md:max-w-3xl md:px-8">
-        <Heading size="mobile" eyebrow={t.groups.eyebrow} title={t.groups.title} text={t.groups.text} accent="#FF6F9F" />
+        <Heading size="mobile" eyebrow={t.groups.eyebrow} title={t.groups.title} text={t.groups.text} accent="#7545CB" />
 
         <ul className="mt-6 grid gap-3.5 md:grid-cols-2 md:gap-4">
           {GROUPS.map((g, i) => {
@@ -113,7 +114,7 @@ function MobileGroups() {
                   className={`relative grid size-[4.5rem] shrink-0 place-items-center ${BADGE_SHAPES[i]} shadow-md ring-[3px] ring-white`}
                   style={{ background: tone.blob }}
                 >
-                  <span className="text-[1.7rem] font-black leading-none">
+                  <span className="text-[1.7rem] font-black leading-none" style={{ color: tone.badgeText }}>
                     {g.age}
                     <span className="align-top text-base">+</span>
                   </span>
@@ -131,7 +132,7 @@ function MobileGroups() {
           })}
         </ul>
       </div>
-      <Wave fill="#FFF4EA" className="h-6" />
+      <Wave fill="#FFF8E6" className="h-6" />
     </div>
   );
 }

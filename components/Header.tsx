@@ -9,7 +9,7 @@ import { useLang } from "./LanguageProvider";
 import { InstagramIcon, WhatsAppIcon } from "./ui/BrandIcons";
 import { Sun } from "./ui/Decor";
 
-const NAV_COLORS = ["#FF9DB8", "#7CCFF5", "#FFB27A", "#8FE0A1", "#FFC93C", "#B49CFF"];
+const NAV_COLORS = ["#B49AF0", "#9C7BE3", "#FFC94D", "#CDB8F7", "#FFD84D", "#B49AF0"];
 
 function useActiveSection() {
   const [active, setActive] = useState<string>("home");
@@ -180,7 +180,7 @@ function MobileHeader({ logo }: { logo: string | null }) {
             aria-controls="mobile-menu"
             aria-label={open ? t.closeMenu : t.openMenu}
             onClick={() => setOpen((v) => !v)}
-            className="grid size-11 place-items-center rounded-2xl bg-ink text-white shadow-md"
+            className="grid size-11 place-items-center rounded-2xl bg-[#7545CB] text-white shadow-md shadow-[#7545CB]/30"
           >
             {open ? <X className="size-6" aria-hidden /> : <Menu className="size-6" aria-hidden />}
           </button>
@@ -191,7 +191,7 @@ function MobileHeader({ logo }: { logo: string | null }) {
         <div
           id="mobile-menu"
           ref={panelRef}
-          className="fixed inset-x-0 bottom-0 top-[var(--header-h)] overflow-y-auto bg-gradient-to-b from-[#fffdf5] via-[#FFF8D6] to-[#E6F7FF] px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4 md:px-8"
+          className="fixed inset-x-0 bottom-0 top-[var(--header-h)] overflow-y-auto bg-gradient-to-b from-[#FFFDF7] via-[#FFF8D6] to-[#EFE7FF] px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4 md:px-8"
         >
           <nav aria-label={t.mainNav} className="mx-auto max-w-md">
             <ul className="grid gap-2.5">
@@ -217,7 +217,7 @@ function MobileHeader({ logo }: { logo: string | null }) {
               <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-wa px-3 font-extrabold text-white shadow-md">
                 <WhatsAppIcon className="size-5" /> WhatsApp<span className="sr-only">{t.newTab}</span>
               </a>
-              <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] px-3 font-extrabold text-white shadow-md">
+              <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[#FFD84D] px-3 font-extrabold text-ink shadow-md">
                 <InstagramIcon className="size-5" /> Instagram<span className="sr-only">{t.newTab}</span>
               </a>
               {SITE.phones.map((p) => (
@@ -238,7 +238,7 @@ function MobileHeader({ logo }: { logo: string | null }) {
 
 export function Header({ logo }: { logo: string | null }) {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 shadow-[0_1px_0_rgba(41,54,74,.06)] bg-[#fffdf5]/95 lg:bg-[#fffdf5]/85 lg:backdrop-blur-md">
+    <header className="fixed inset-x-0 top-0 z-50 shadow-[0_1px_0_rgba(48,35,71,.06)] bg-[#FFFDF7]/95 lg:bg-[#FFFDF7]/90 lg:backdrop-blur-md">
       <div className="hidden lg:block">
         <DesktopHeader logo={logo} />
       </div>

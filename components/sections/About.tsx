@@ -16,11 +16,11 @@ function AboutMedia({ image, video }: { image: string | null; video: string | nu
 
 const ICONS = [Users, Languages, Baby, Utensils, Clock];
 const TONES = [
-  { bg: "bg-rose", dot: "#FF6F9F" },
-  { bg: "bg-sky", dot: "#3FB4EA" },
-  { bg: "bg-sun", dot: "#FFB627" },
-  { bg: "bg-peach", dot: "#FF9A5A" },
-  { bg: "bg-mint", dot: "#3FBF6A" },
+  { bg: "bg-[#DCCDFA]", dot: "#7545CB" },
+  { bg: "bg-sky", dot: "#7545CB" },
+  { bg: "bg-sun", dot: "#F5BE1F" },
+  { bg: "bg-peach", dot: "#E8A317" },
+  { bg: "bg-mint", dot: "#8B63D9" },
 ];
 // Разные формы карточек вместо одинаковых прямоугольников
 const SHAPES = [
@@ -37,7 +37,7 @@ function DesktopAbout({ image, video }: { image: string | null; video: string | 
   const { t } = useLang();
   const f = t.about.features;
   return (
-    <div className="screen relative flex flex-col justify-center bg-[linear-gradient(180deg,#F2FBF4_0%,#FFFDF5_100%)]">
+    <div className="screen relative flex flex-col justify-center bg-[linear-gradient(180deg,#F5F0FF_0%,#FFFDF7_100%)]">
       <Cloud className="absolute right-[4%] top-10 w-24 animate-drift" />
       <Dots className="absolute bottom-20 left-6 size-16" />
       <div className="relative mx-auto grid w-full max-w-[1240px] grid-cols-[0.9fr_1.1fr] items-center gap-12 px-8 py-14 short:py-8 xl:gap-16">
@@ -49,11 +49,11 @@ function DesktopAbout({ image, video }: { image: string | null; video: string | 
                 <AboutMedia image={image} video={video} />
               </div>
             </div>
-            <Flower className="absolute -bottom-3 -right-3 size-10" petal="#FFB27A" />
-            <Star className="absolute -left-2 top-6 size-7 animate-twinkle" color="#FF9DB8" />
+            <Flower className="absolute -bottom-3 -right-3 size-10" petal="#FFC94D" />
+            <Star className="absolute -left-2 top-6 size-7 animate-twinkle" color="#B49AF0" />
           </div>
           <div className="self-center">
-            <Heading eyebrow={t.about.eyebrow} title={t.about.title} accent="#3FBF6A" />
+            <Heading eyebrow={t.about.eyebrow} title={t.about.title} accent="#8B63D9" />
           </div>
           <p className="col-span-2 max-w-xl text-[1.05rem] leading-relaxed text-ink-soft short:text-base">
             {t.about.text}
@@ -68,7 +68,7 @@ function DesktopAbout({ image, video }: { image: string | null; video: string | 
             return (
               <li
                 key={item.title}
-                className={`group relative flex gap-4 overflow-hidden p-5 shadow-[0_12px_30px_-18px_rgba(41,54,74,.45)] ring-1 ring-white transition hover:-translate-y-1 short:p-4 ${TONES[i].bg} ${SHAPES[i]} ${
+                className={`group relative flex gap-4 overflow-hidden p-5 shadow-[0_12px_30px_-18px_rgba(48,35,71,.45)] ring-1 ring-white transition hover:-translate-y-1 short:p-4 ${TONES[i].bg} ${SHAPES[i]} ${
                   last ? "col-span-2 items-center" : "flex-col"
                 }`}
               >
@@ -85,7 +85,7 @@ function DesktopAbout({ image, video }: { image: string | null; video: string | 
           })}
         </ul>
       </div>
-      <Wave fill="#FFF0F5" className="relative -mb-px h-10" />
+      <Wave fill="#F7F0FF" className="relative -mb-px h-10" />
     </div>
   );
 }
@@ -95,9 +95,9 @@ function DesktopAbout({ image, video }: { image: string | null; video: string | 
 function MobileAbout({ image, video }: { image: string | null; video: string | null }) {
   const { t } = useLang();
   return (
-    <div className="relative bg-[linear-gradient(180deg,#F2FBF4_0%,#FFFDF5_100%)]">
+    <div className="relative bg-[linear-gradient(180deg,#F5F0FF_0%,#FFFDF7_100%)]">
       <div className="mx-auto max-w-xl px-4 pb-8 pt-10 md:max-w-3xl md:px-8">
-        <Heading size="mobile" eyebrow={t.about.eyebrow} title={t.about.title} accent="#3FBF6A" />
+        <Heading size="mobile" eyebrow={t.about.eyebrow} title={t.about.title} accent="#8B63D9" />
 
         <div className="mt-5 flex items-start gap-4">
           <div className="relative w-[38%] max-w-[170px] shrink-0">
@@ -106,7 +106,7 @@ function MobileAbout({ image, video }: { image: string | null; video: string | n
                 <AboutMedia image={image} video={video} />
               </div>
             </div>
-            <Star className="absolute -right-1 -top-1 size-6 animate-twinkle" color="#FF9DB8" />
+            <Star className="absolute -right-1 -top-1 size-6 animate-twinkle" color="#B49AF0" />
           </div>
           <p className="min-w-0 text-[15px] leading-relaxed text-ink-soft">{t.about.text}</p>
         </div>
@@ -130,7 +130,7 @@ function MobileAbout({ image, video }: { image: string | null; video: string | n
           })}
         </ol>
       </div>
-      <Wave fill="#FFF0F5" className="h-6" />
+      <Wave fill="#F7F0FF" className="h-6" />
     </div>
   );
 }

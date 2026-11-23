@@ -9,8 +9,8 @@ import { Wave } from "./ui/Decor";
 export function Footer() {
   const { t, lang } = useLang();
   return (
-    <footer className="relative bg-ink text-white/85">
-      <Wave fill="#29364A" className="absolute -top-6 h-6 lg:-top-10 lg:h-10" />
+    <footer className="relative bg-gradient-to-b from-[#6A3BBE] to-[#5A31A6] text-white/90">
+      <Wave fill="#6A3BBE" className="absolute -top-6 h-6 lg:-top-10 lg:h-10" />
       {/* нижний отступ на телефоне — чтобы плавающая кнопка WhatsApp ничего не перекрывала */}
       <div className="mx-auto max-w-[1240px] px-4 pb-24 pt-8 md:px-8 lg:pb-8">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
@@ -40,7 +40,7 @@ export function Footer() {
             </ul>
           </nav>
         </div>
-        <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 pt-5 text-[13px]">
+        <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/15 pt-5 text-[13px] lg:pr-20">
           <p>
             © {new Date().getFullYear()} «Айза». {t.footer.rights}
           </p>

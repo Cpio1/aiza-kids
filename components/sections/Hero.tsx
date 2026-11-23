@@ -18,15 +18,15 @@ function Title({ className = "" }: { className?: string }) {
     <h1 className={`font-black leading-[1.06] tracking-tight text-ink text-balance ${className}`}>
       {lang === "kk" ? (
         <>
-          <span className="relative inline-block text-[#ff6f9f]">
+          <span className="relative inline-block text-[#7545CB]">
             {t.hero.titleA}
-            <Sparkle color="#FFC93C" className="absolute -right-4 -top-2 size-5 animate-twinkle" />
+            <Sparkle color="#FFD84D" className="absolute -right-4 -top-2 size-5 animate-twinkle" />
           </span>{" "}
           {t.hero.titleB}
         </>
       ) : (
         <>
-          {t.hero.titleA} <span className="text-[#ff6f9f]">{t.hero.titleB}</span>
+          {t.hero.titleA} <span className="text-[#7545CB]">{t.hero.titleB}</span>
         </>
       )}
     </h1>
@@ -40,10 +40,10 @@ function DesktopHero({ image }: { image: string | null }) {
   return (
     <div className="screen relative flex flex-col">
       {/* фон */}
-      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_20%,#FFF3B0_0%,transparent_55%),radial-gradient(ellipse_at_85%_30%,#BDEBFF_0%,transparent_55%),linear-gradient(180deg,#fffdf5_0%,#FFF8D6_100%)]" />
+      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_20%,#FFF1A8_0%,transparent_55%),radial-gradient(ellipse_at_85%_30%,#EDE4FF_0%,transparent_55%),linear-gradient(180deg,#FFFDF7_0%,#FFF8D6_100%)]" />
       <Cloud className="absolute left-[3%] top-[8%] w-28 animate-drift opacity-90" />
       <Cloud className="absolute right-[38%] top-[5%] w-20 animate-drift opacity-80 [animation-delay:-9s]" />
-      <Star className="absolute left-[44%] top-[14%] size-6 animate-twinkle" color="#FF9DB8" />
+      <Star className="absolute left-[44%] top-[14%] size-6 animate-twinkle" color="#B49AF0" />
       <Flower className="absolute bottom-16 left-[2%] size-10 animate-float-slow" />
 
       <div className="relative mx-auto grid w-full max-w-[1240px] flex-1 grid-cols-[1.05fr_1fr] items-center gap-10 px-8 py-10 short:py-6 xl:gap-14">
@@ -71,7 +71,7 @@ function DesktopHero({ image }: { image: string | null }) {
             </a>
             <a
               href="#groups"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 font-extrabold text-ink shadow-md ring-2 ring-sky transition hover:-translate-y-0.5 hover:ring-sky-deep"
+              className="inline-flex items-center gap-2 rounded-full bg-[#FFD84D] px-6 py-3.5 font-extrabold text-ink shadow-md shadow-[#F5BE1F]/40 transition hover:-translate-y-0.5 hover:bg-[#FFCC1F]"
             >
               {t.hero.groups}
               <ArrowDown className="size-4" aria-hidden />
@@ -96,7 +96,7 @@ function DesktopHero({ image }: { image: string | null }) {
         {/* изображение */}
         <div className="relative mx-auto flex w-full max-w-[540px] items-center justify-center">
           <Rainbow className="absolute -top-4 left-1/2 w-[86%] -translate-x-1/2 opacity-80" />
-          <div className="blob-a relative aspect-square h-[min(56svh,480px)] max-w-full bg-gradient-to-br from-sky via-white to-rose p-3 shadow-[0_30px_60px_-25px_rgba(41,54,74,.35)]">
+          <div className="blob-a relative aspect-square h-[min(56svh,480px)] max-w-full bg-gradient-to-br from-sky via-white to-rose p-3 shadow-[0_30px_60px_-25px_rgba(48,35,71,.35)]">
             <div className="blob-a flex size-full items-center justify-center overflow-hidden bg-white/60">
               <SmartImage src={image} alt={t.hero.imageAlt} priority className="size-full" fallbackClassName="size-full" />
             </div>
@@ -111,11 +111,11 @@ function DesktopHero({ image }: { image: string | null }) {
               <span className="block font-black">{SITE.hours}</span>
             </span>
           </div>
-          <Star className="absolute -bottom-2 right-[16%] size-9 animate-twinkle" color="#7CCFF5" />
-          <Flower className="absolute right-0 top-[48%] size-9" petal="#8FE0A1" />
+          <Star className="absolute -bottom-2 right-[16%] size-9 animate-twinkle" color="#9C7BE3" />
+          <Flower className="absolute right-0 top-[48%] size-9" petal="#CDB8F7" />
         </div>
       </div>
-      <Wave fill="#F2FBF4" className="relative -mb-px h-10" />
+      <Wave fill="#F5F0FF" className="relative -mb-px h-10" />
     </div>
   );
 }
@@ -125,7 +125,7 @@ function DesktopHero({ image }: { image: string | null }) {
 function MobileHero({ image }: { image: string | null }) {
   const { t } = useLang();
   return (
-    <div className="relative overflow-hidden bg-[linear-gradient(180deg,#FFF6CC_0%,#FFFDF5_45%,#E6F7FF_100%)]">
+    <div className="relative overflow-hidden bg-[linear-gradient(180deg,#FFF6CC_0%,#FFFDF7_45%,#EFE7FF_100%)]">
       <Cloud className="absolute -left-6 top-4 w-20 opacity-90" />
       <Sun className="absolute -right-5 top-2 size-20 animate-float" />
 
@@ -140,13 +140,13 @@ function MobileHero({ image }: { image: string | null }) {
           {/* изображение в «окошке» с радугой */}
           <div className="relative mx-auto mt-6 w-full max-w-[290px] min-[390px]:max-w-[320px] md:order-2 md:max-w-[340px] md:mt-4">
             <Rainbow className="absolute -top-5 left-1/2 w-[78%] -translate-x-1/2" />
-            <div className="arch relative aspect-[4/4.2] w-full overflow-hidden bg-gradient-to-b from-sky to-rose p-2.5 shadow-[0_20px_40px_-20px_rgba(41,54,74,.4)]">
+            <div className="arch relative aspect-[4/4.2] w-full overflow-hidden bg-gradient-to-b from-sky to-rose p-2.5 shadow-[0_20px_40px_-20px_rgba(48,35,71,.4)]">
               <div className="arch flex size-full items-center justify-center overflow-hidden bg-white/60">
                 <SmartImage src={image} alt={t.hero.imageAlt} priority className="size-full" fallbackClassName="size-full" />
               </div>
             </div>
             <Flower className="absolute -bottom-3 -left-2 size-10" />
-            <Star className="absolute -right-1 bottom-8 size-7 animate-twinkle" color="#FF9DB8" />
+            <Star className="absolute -right-1 bottom-8 size-7 animate-twinkle" color="#B49AF0" />
           </div>
 
           <div className="md:order-1">
@@ -164,7 +164,7 @@ function MobileHero({ image }: { image: string | null }) {
               </a>
               <a
                 href="#groups"
-                className="flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-white px-5 text-[16px] font-extrabold text-ink shadow-md ring-2 ring-sky"
+                className="flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-[#FFD84D] px-5 text-[16px] font-extrabold text-ink shadow-md shadow-[#F5BE1F]/40"
               >
                 {t.hero.groups}
                 <ArrowDown className="size-4" aria-hidden />
@@ -187,7 +187,7 @@ function MobileHero({ image }: { image: string | null }) {
           })}
         </ul>
       </div>
-      <Wave fill="#F2FBF4" className="h-6" />
+      <Wave fill="#F5F0FF" className="h-6" />
     </div>
   );
 }

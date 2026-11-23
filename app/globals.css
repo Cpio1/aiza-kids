@@ -7,20 +7,20 @@
 @custom-variant short (@media (min-width: 1024px) and (max-height: 820px));
 
 @theme {
-  --color-ink: #29364a;
-  --color-ink-soft: #4f5d74;
-  --color-sun: #fff3b0;
-  --color-sky: #bdebff;
-  --color-peach: #ffd6b5;
-  --color-mint: #c9f2d0;
-  --color-rose: #ffd5e5;
-  --color-sun-deep: #ffc93c;
-  --color-sky-deep: #3fb4ea;
-  --color-peach-deep: #ff9a5a;
-  --color-mint-deep: #3fbf6a;
-  --color-rose-deep: #ff6f9f;
-  --color-wa: #1fa855;
-  --color-wa-dark: #178a45;
+  --color-ink: #302347;
+  --color-ink-soft: #5B4D74;
+  --color-sun: #FFF1A8;
+  --color-sky: #EDE4FF;
+  --color-peach: #FFE9B0;
+  --color-mint: #D9C8FA;
+  --color-rose: #F3E6FF;
+  --color-sun-deep: #FFD84D;
+  --color-sky-deep: #7545CB;
+  --color-peach-deep: #E8A317;
+  --color-mint-deep: #8B63D9;
+  --color-rose-deep: #7545CB;
+  --color-wa: #7545CB;
+  --color-wa-dark: #5E34AE;
 
   --font-sans: var(--font-nunito), "Segoe UI", system-ui, sans-serif;
 
@@ -56,14 +56,14 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--header-h);
-  background: #fffdf5;
+  background: #FFFDF7;
   color: var(--color-ink);
   overflow-x: clip;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: #fffdf5;
+  background: #FFFDF7;
   color: var(--color-ink);
   overflow-x: hidden; /* fallback для старых Safari */
   overflow-x: clip;

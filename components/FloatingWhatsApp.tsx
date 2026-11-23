@@ -37,7 +37,7 @@ export function FloatingWhatsApp() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${t.floatingWa} ${t.newTab}`}
-      className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-3 z-40 grid size-[52px] place-items-center rounded-full bg-wa text-white shadow-[0_10px_30px_-6px_rgba(31,168,85,.7)] ring-4 ring-white transition duration-300 hover:scale-105 hover:bg-wa-dark lg:bottom-6 lg:right-6 lg:size-[3.75rem] ${
+      className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-3 z-40 grid size-[52px] place-items-center rounded-full bg-wa text-white shadow-[0_10px_30px_-6px_rgba(117,69,203,.7)] ring-4 ring-white transition duration-300 hover:scale-105 hover:bg-wa-dark lg:bottom-6 lg:right-6 lg:size-[3.75rem] ${
         show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"
       }`}
       tabIndex={show ? undefined : -1}
