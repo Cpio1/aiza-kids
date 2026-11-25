@@ -21,7 +21,7 @@ export default function Page() {
     "@context": "https://schema.org",
     "@type": "ChildCare",
     name: "ЧУ «Ясли-сад „Айза“»",
-    alternateName: "«Айза» балабақшасы",
+    alternateName: "ЖМ «Айза» бөбекжай-балабақшасы",
     telephone: SITE.phones.map((p) => p.tel),
     address: {
       "@type": "PostalAddress",

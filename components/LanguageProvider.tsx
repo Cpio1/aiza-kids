@@ -23,8 +23,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.lang = lang;
     document.title =
       lang === "kk"
-        ? "«Айза» балабақшасы — Саймасай ауылы"
-        : "Детский сад «Айза» — село Саймасай";
+        ? "ЖМ «Айза» бөбекжай-балабақшасы — Саймасай ауылы"
+        : "ЧУ «Ясли-сад „Айза“» — село Саймасай";
   }, [lang]);
 
   const setLang = useCallback((l: Lang) => {

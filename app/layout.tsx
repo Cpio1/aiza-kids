@@ -12,10 +12,10 @@ const nunito = Nunito({
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://aiza.kz";
-const TITLE = "«Айза» балабақшасы — Детский сад «Айза» | Саймасай";
+const TITLE = "ЖМ «Айза» бөбекжай-балабақшасы — ЧУ «Ясли-сад „Айза“» | Саймасай";
 const DESCRIPTION =
-  "«Айза» бөбекжай-бақшасы, Саймасай ауылы: 2 жастан асқан балаларға арналған 4 топ, қазақ тілінде оқыту, 4 рет тамақтану, 07:30–18:00. " +
-  "Ясли-сад «Айза», село Саймасай: 4 группы для детей от 2 лет, обучение на казахском языке, 4-разовое питание.";
+  "ЖМ «Айза» бөбекжай-балабақшасы, Саймасай ауылы: 2 жастан асқан балаларға арналған 4 топ, қазақ тілінде оқыту, 4 рет тамақтану, 07:30–18:00. " +
+  "ЧУ «Ясли-сад „Айза“», село Саймасай: 4 группы для детей от 2 лет, обучение на казахском языке, 4-разовое питание.";
 
 export function generateMetadata(): Metadata {
   const { logo, hero } = getAssets();
@@ -32,7 +32,7 @@ export function generateMetadata(): Metadata {
       type: "website",
       title: TITLE,
       description: DESCRIPTION,
-      siteName: "«Айза»",
+      siteName: "ЧУ «Ясли-сад „Айза“» / ЖМ «Айза» бөбекжай-балабақшасы",
       locale: "kk_KZ",
       alternateLocale: ["ru_RU"],
       images: ogImage ? [{ url: `${BASE_PATH}${ogImage}` }] : undefined,

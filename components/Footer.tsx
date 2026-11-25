@@ -48,7 +48,7 @@ export function Footer() {
         </div>
         <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/15 pt-5 text-[13px] lg:pr-20">
           <p>
-            © {new Date().getFullYear()} «Айза». {t.footer.rights}
+            © {new Date().getFullYear()} {t.fullName}. {t.footer.rights}
           </p>
           <button
             type="button"
