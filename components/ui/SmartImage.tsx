@@ -52,7 +52,7 @@ type FrameProps = {
   /** максимальная высота рамки (CSS-значение), ширина подстраивается под пропорции фото */
   maxHeight?: string;
   /** форма рамки */
-  shape?: "wave" | "leaf" | "soft";
+  shape?: "wave" | "leaf" | "soft" | "blob" | "arch";
   tone?: "purple" | "yellow";
   priority?: boolean;
   sizes?: string;
@@ -65,6 +65,8 @@ const SHAPES = {
   wave: ["rounded-[3rem_1.25rem_3rem_1.25rem]", "rounded-[2.6rem_0.9rem_2.6rem_0.9rem]"],
   leaf: ["rounded-[1.25rem_3.25rem_1.25rem_3.25rem]", "rounded-[0.9rem_2.85rem_0.9rem_2.85rem]"],
   soft: ["rounded-[2.25rem]", "rounded-[1.9rem]"],
+  blob: ["blob-a", "blob-a"],
+  arch: ["rounded-[50%_50%_2.5rem_2.5rem/38%_38%_2.5rem_2.5rem]", "rounded-[50%_50%_2.1rem_2.1rem/38%_38%_2.1rem_2.1rem]"],
 } as const;
 
 /**
@@ -81,9 +83,11 @@ export function PhotoFrame({ item, alt, fallbackRatio = 4 / 3, maxHeight, shape 
       className={`relative ${align === "center" ? "mx-auto" : ""} ${className}`}
       style={{ aspectRatio: ratio, width: maxHeight ? `min(100%, calc(${maxHeight} * ${ratio}))` : "100%" }}
     >
-      {/* смещённая цветная «подложка» */}
-      <div aria-hidden className={`absolute inset-0 translate-x-3 translate-y-3 rotate-[2.5deg] ${outer} ${backing} opacity-90`} />
-      <div className={`relative size-full bg-gradient-to-br p-[6px] shadow-[0_24px_50px_-24px_rgba(48,35,71,.45)] ${outer} ${ring}`}>
+      {/* мягкое пятно за фото и смещённая цветная «подложка» */}
+      <div aria-hidden className={`absolute -inset-[8%] -z-0 rounded-full blur-2xl ${tone === "purple" ? "bg-[#D9C8FA]/70" : "bg-[#FFE47A]/60"}`} />
+      <div aria-hidden className={`absolute inset-0 translate-x-3 translate-y-3 rotate-[2.5deg] ${shape === "blob" ? "blob-b" : outer} ${backing} opacity-90`} />
+      <div aria-hidden className={`absolute inset-0 -translate-x-2.5 -translate-y-2.5 -rotate-[2deg] border-[3px] border-dashed ${shape === "blob" ? "blob-c" : outer} ${tone === "purple" ? "border-[#B49AF0]/70" : "border-[#FFC94D]/80"}`} />
+      <div className={`relative size-full bg-gradient-to-br p-[7px] shadow-[0_24px_50px_-24px_rgba(48,35,71,.45)] ${outer} ${ring}`}>
         <div className={`size-full overflow-hidden bg-white ${inner}`}>
           <SmartImage item={item} alt={alt} priority={priority} sizes={sizes} className="size-full" fallbackClassName="size-full" />
         </div>

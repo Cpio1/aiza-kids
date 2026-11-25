@@ -6,19 +6,29 @@ import { asset } from "@/lib/path";
 import { srcSetOf, type MediaItem } from "@/lib/media";
 import { useLang } from "../LanguageProvider";
 import { Heading } from "../ui/Heading";
-import { Cloud, Flower, KindergartenIllustration, Sparkle, Star, Wave } from "../ui/Decor";
+import { Bunting, Cloud, Flower, Heart, Hills, KindergartenIllustration, Sparkle, Star } from "../ui/Decor";
 import { Responsive } from "../ui/Responsive";
 
 type OpenFn = (i: number) => void;
 
-// Разнообразные асимметричные формы и чередующиеся фиолетовые/жёлтые рамки
+// Фотозона: у каждой рамки своя форма, цвет, наклон и «наклейка» (скотч, сердечко, звёздочка)
 const FRAMES = [
-  { outer: "rounded-[1.75rem_0.75rem_1.75rem_1.75rem]", inner: "rounded-[1.45rem_0.5rem_1.45rem_1.45rem]", ring: "from-[#7545CB] to-[#B49AF0]" },
-  { outer: "rounded-[0.75rem_1.75rem_1.75rem_1.75rem]", inner: "rounded-[0.5rem_1.45rem_1.45rem_1.45rem]", ring: "from-[#FFD84D] to-[#FFE47A]" },
-  { outer: "rounded-[1.75rem]", inner: "rounded-[1.45rem]", ring: "from-[#B49AF0] to-[#FFD84D]" },
-  { outer: "rounded-[1.75rem_1.75rem_0.75rem_1.75rem]", inner: "rounded-[1.45rem_1.45rem_0.5rem_1.45rem]", ring: "from-[#FFD84D] to-[#B49AF0]" },
-  { outer: "rounded-[1.75rem_1.75rem_1.75rem_0.75rem]", inner: "rounded-[1.45rem_1.45rem_1.45rem_0.5rem]", ring: "from-[#8B63D9] to-[#7545CB]" },
+  { outer: "rounded-[2rem_0.8rem_2rem_2rem]", inner: "rounded-[1.7rem_0.55rem_1.7rem_1.7rem]", ring: "bg-white", tilt: "-rotate-[1.2deg]", deco: "tape-y" },
+  { outer: "rounded-[0.8rem_2.2rem_2.2rem_2.2rem]", inner: "rounded-[0.55rem_1.9rem_1.9rem_1.9rem]", ring: "bg-gradient-to-br from-[#7545CB] to-[#B49AF0]", tilt: "rotate-1", deco: "heart" },
+  { outer: "rounded-[2.4rem]", inner: "rounded-[2.1rem]", ring: "bg-gradient-to-br from-[#FFD84D] to-[#FFE47A]", tilt: "-rotate-[0.6deg]", deco: "star" },
+  { outer: "rounded-[2.2rem_2.2rem_0.8rem_2.2rem]", inner: "rounded-[1.9rem_1.9rem_0.55rem_1.9rem]", ring: "bg-white", tilt: "rotate-[1.4deg]", deco: "tape-p" },
+  { outer: "rounded-[2.8rem_2.8rem_1.2rem_1.2rem]", inner: "rounded-[2.5rem_2.5rem_0.9rem_0.9rem]", ring: "bg-gradient-to-br from-[#B49AF0] to-[#FFD84D]", tilt: "-rotate-1", deco: "flower" },
 ];
+
+function Sticker({ kind }: { kind: string }) {
+  if (kind === "tape-y")
+    return <span aria-hidden className="absolute -top-2.5 left-1/2 z-10 h-5 w-16 -translate-x-1/2 -rotate-6 rounded-[3px] bg-[#FFE47A]/85 shadow-sm" />;
+  if (kind === "tape-p")
+    return <span aria-hidden className="absolute -top-2 right-6 z-10 h-5 w-14 rotate-[8deg] rounded-[3px] bg-[#CDB8F7]/85 shadow-sm" />;
+  if (kind === "heart") return <Heart className="absolute -left-2.5 -top-2.5 z-10 size-7 drop-shadow animate-bob" color="#FFD84D" />;
+  if (kind === "star") return <Star className="absolute -right-3 -top-3 z-10 size-8 drop-shadow animate-twinkle" color="#7545CB" />;
+  return <Flower className="absolute -bottom-3 -right-3 z-10 size-8 drop-shadow animate-sway" petal="#FFD84D" center="#7545CB" />;
+}
 
 /** Превью в рамке. Рамка повторяет пропорции фото — ничего не обрезается и не растягивается. */
 function Thumb({ item, index, onOpen, sizes, eager, className = "", style }: { item: MediaItem; index: number; onOpen: OpenFn; sizes: string; eager?: boolean; className?: string; style?: React.CSSProperties }) {
@@ -31,9 +41,10 @@ function Thumb({ item, index, onOpen, sizes, eager, className = "", style }: { i
       data-index={index}
       onClick={() => onOpen(index)}
       aria-label={`${t.gallery.open} ${index + 1}`}
-      className={`group relative block bg-gradient-to-br p-[4px] shadow-[0_12px_28px_-18px_rgba(48,35,71,.55)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_34px_-18px_rgba(117,69,203,.6)] ${f.outer} ${f.ring} ${className}`}
+      className={`group relative block p-[5px] shadow-[0_14px_28px_-16px_rgba(48,35,71,.55)] transition duration-300 hover:z-20 hover:-translate-y-1 hover:rotate-0 hover:scale-[1.03] hover:shadow-[0_22px_38px_-18px_rgba(117,69,203,.65)] ${f.outer} ${f.ring} ${f.tilt} ${className}`}
       style={style}
     >
+      <Sticker kind={f.deco} />
       <span className={`block overflow-hidden bg-[#F1EAFF] ${f.inner}`} style={{ aspectRatio: `${item.w} / ${item.h}` }}>
         {broken ? (
           <KindergartenIllustration className="size-full" />
@@ -49,11 +60,11 @@ function Thumb({ item, index, onOpen, sizes, eager, className = "", style }: { i
             loading={eager ? "eager" : "lazy"}
             decoding="async"
             onError={() => setBroken(true)}
-            className="size-full object-cover transition duration-500 group-hover:scale-[1.04]"
+            className="size-full object-cover transition duration-500 group-hover:scale-[1.05]"
           />
         )}
       </span>
-      <span aria-hidden className="absolute bottom-3 right-3 grid size-8 place-items-center rounded-full bg-white/90 text-[#7545CB] opacity-0 shadow transition group-hover:opacity-100 group-focus-visible:opacity-100">
+      <span aria-hidden className="absolute bottom-3 right-3 grid size-9 place-items-center rounded-full bg-white/95 text-[#7545CB] opacity-0 shadow transition group-hover:opacity-100 group-focus-visible:opacity-100">
         <Expand className="size-4" />
       </span>
     </button>
@@ -80,7 +91,7 @@ function MoreButton({ all, hidden, onClick, className = "" }: { all: boolean; hi
       type="button"
       onClick={onClick}
       aria-expanded={all}
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#FFD84D] px-5 font-extrabold text-ink shadow-md shadow-[#F5BE1F]/40 transition hover:bg-[#FFCC1F] ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#FFD84D] px-5 font-extrabold text-ink shadow-[0_10px_20px_-10px_rgba(232,163,23,.8)] ring-4 ring-white/80 transition hover:-translate-y-0.5 hover:bg-[#FFCC1F] ${className}`}
     >
       <Images className="size-4" aria-hidden />
       {all ? t.gallery.showLess : `${t.gallery.showAll} (+${hidden})`}
@@ -186,10 +197,14 @@ function DesktopGallery({ photos, onOpen }: { photos: MediaItem[]; onOpen: OpenF
   const rows = justify(photos.slice(0, count), plan.width, plan.target);
 
   return (
-    <div ref={rootRef} className="screen relative flex flex-col justify-center bg-[linear-gradient(180deg,#F1EAFF_0%,#FFFDF7_70%,#FFF8E1_100%)]">
-      <Cloud className="absolute right-[5%] top-8 w-24 animate-drift" />
+    <div ref={rootRef} className="screen relative flex flex-col justify-center bg-[radial-gradient(ellipse_at_85%_15%,#FFF1A8_0%,transparent_40%),radial-gradient(ellipse_at_10%_80%,#E4D6FF_0%,transparent_45%),linear-gradient(180deg,#F1EAFF_0%,#FFFDF7_70%,#FFF8E1_100%)]">
+      <div aria-hidden className="pattern-confetti pointer-events-none absolute inset-0 opacity-60" />
+      {/* гирлянда фотозоны */}
+      <Bunting className="absolute inset-x-0 top-0 h-12 w-full opacity-90" count={22} />
+      <Cloud className="absolute right-[5%] top-14 w-24 animate-drift" />
       <Star className="absolute left-[3%] top-24 size-6 animate-twinkle" color="#FFD84D" />
-      <div className="relative mx-auto w-full max-w-[1240px] px-8 py-12 short:py-6">
+      <Heart className="absolute left-[2%] bottom-24 size-6 animate-bob" color="#B49AF0" />
+      <div className="relative mx-auto my-auto w-full max-w-[1240px] px-8 pb-12 pt-16 short:pb-6 short:pt-12">
         <div className="flex items-end justify-between gap-8">
           <Heading eyebrow={t.gallery.eyebrow} title={t.gallery.title} text={t.gallery.text} accent="#7545CB" />
           {hidden > 0 && <MoreButton all={all} hidden={hidden} onClick={toggle} className="mb-2 shrink-0" />}
@@ -228,7 +243,7 @@ function DesktopGallery({ photos, onOpen }: { photos: MediaItem[]; onOpen: OpenF
           )}
         </div>
       </div>
-      <Wave fill="#F5F0FF" className="relative -mb-px h-10" />
+      <Hills fill="#F5F0FF" back="#FFF1A8" className="relative -mb-px h-10" />
     </div>
   );
 }
@@ -241,9 +256,11 @@ function MobileGallery({ photos, onOpen }: { photos: MediaItem[]; onOpen: OpenFn
   const { t } = useLang();
   const { all, toggle, listRef, count, hidden } = useReveal(photos.length, MOBILE_LIMIT);
   return (
-    <div className="relative bg-[linear-gradient(180deg,#F1EAFF_0%,#FFFDF7_100%)]">
-      <Flower className="absolute right-4 top-8 size-8" petal="#FFD84D" center="#7545CB" />
-      <div className="mx-auto max-w-xl px-4 pb-8 pt-10 md:max-w-3xl md:px-8">
+    <div className="relative overflow-hidden bg-[linear-gradient(180deg,#F1EAFF_0%,#FFFDF7_100%)]">
+      <div aria-hidden className="pattern-confetti pointer-events-none absolute inset-0 opacity-50" />
+      <Bunting className="absolute inset-x-0 top-0 h-8 w-full" count={10} />
+      <Flower className="absolute right-4 top-12 size-8 animate-sway" petal="#FFD84D" center="#7545CB" />
+      <div className="relative mx-auto max-w-xl px-4 pb-8 pt-14 md:max-w-3xl md:px-8">
         <Heading size="mobile" eyebrow={t.gallery.eyebrow} title={t.gallery.title} text={t.gallery.text} accent="#7545CB" />
         <div className="mt-6">
           {photos.length === 0 ? (
@@ -251,7 +268,7 @@ function MobileGallery({ photos, onOpen }: { photos: MediaItem[]; onOpen: OpenFn
           ) : (
             <>
               {/* кладка в 2 колонки (на планшете — 3): каждое фото в своих пропорциях */}
-              <div ref={listRef} className="columns-2 gap-3 md:columns-3">
+              <div ref={listRef} className="columns-2 gap-4 px-1 pt-2 md:columns-3">
                 {photos.slice(0, count).map((item, i) => (
                   <Thumb
                     key={item.original}
@@ -260,7 +277,7 @@ function MobileGallery({ photos, onOpen }: { photos: MediaItem[]; onOpen: OpenFn
                     onOpen={onOpen}
                     eager={i < 2}
                     sizes="(min-width: 768px) 32vw, 48vw"
-                    className="mb-3 w-full break-inside-avoid"
+                    className="mb-4 w-full break-inside-avoid"
                   />
                 ))}
               </div>
@@ -269,7 +286,7 @@ function MobileGallery({ photos, onOpen }: { photos: MediaItem[]; onOpen: OpenFn
           )}
         </div>
       </div>
-      <Wave fill="#F5F0FF" className="h-6" />
+      <Hills fill="#F5F0FF" back="#FFF1A8" className="relative h-6" />
     </div>
   );
 }

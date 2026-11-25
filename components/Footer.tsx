@@ -4,15 +4,21 @@ import { ArrowUp } from "lucide-react";
 import { NAV, SITE } from "@/lib/content";
 import { scrollToSection } from "@/lib/scroll";
 import { useLang } from "./LanguageProvider";
-import { Wave } from "./ui/Decor";
+import { CloudEdge, Heart, Sparkle, Star } from "./ui/Decor";
 
 export function Footer() {
   const { t, lang } = useLang();
   return (
     <footer className="relative bg-gradient-to-b from-[#6A3BBE] to-[#5A31A6] text-white/90">
-      <Wave fill="#6A3BBE" className="absolute -top-6 h-6 lg:-top-10 lg:h-10" />
+      <CloudEdge fill="#6A3BBE" back="#B49AF0" className="absolute -top-8 h-8 lg:-top-12 lg:h-12" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <Star className="absolute left-[6%] top-6 size-5 animate-twinkle" color="#FFD84D" />
+        <Sparkle className="absolute right-[30%] top-10 size-4 animate-twinkle [animation-delay:-1s]" color="#fff" />
+        <Heart className="absolute right-[8%] bottom-10 size-5 animate-bob opacity-70" color="#CDB8F7" />
+        <span className="absolute -bottom-16 left-[40%] size-48 rounded-full bg-white/5" />
+      </div>
       {/* нижний отступ на телефоне — чтобы плавающая кнопка WhatsApp ничего не перекрывала */}
-      <div className="mx-auto max-w-[1240px] px-4 pb-24 pt-8 md:px-8 lg:pb-8">
+      <div className="relative mx-auto max-w-[1240px] px-4 pb-24 pt-8 md:px-8 lg:pb-8">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xl font-black text-white">{t.fullName}</p>

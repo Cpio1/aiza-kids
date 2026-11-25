@@ -11,6 +11,7 @@ import { Nutrition } from "@/components/sections/Nutrition";
 import { Gallery } from "@/components/sections/Gallery";
 import { Documents } from "@/components/sections/Documents";
 import { Contacts } from "@/components/sections/Contacts";
+import { RevealObserver } from "@/components/ui/RevealObserver";
 
 export default function Page() {
   // Файлы из public/ проверяются при сборке — отсутствующие не дают битых ссылок.
@@ -46,6 +47,7 @@ export default function Page() {
       </main>
       <Footer />
       <FloatingWhatsApp />
+      <RevealObserver />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </LanguageProvider>
   );

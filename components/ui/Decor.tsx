@@ -163,3 +163,147 @@ export function KindergartenIllustration({ className = "" }: P) {
     </svg>
   );
 }
+
+export function Heart({ className = "", color = "#B49AF0" }: P & { color?: string }) {
+  return (
+    <svg aria-hidden viewBox="0 0 32 30" className={`${base} ${className}`}>
+      <path d="M16 28S2 19.5 2 10.2C2 5.6 5.4 2 9.6 2c2.8 0 5 1.5 6.4 3.8C17.4 3.5 19.6 2 22.4 2 26.6 2 30 5.6 30 10.2 30 19.5 16 28 16 28Z" fill={color} />
+      <ellipse cx="9" cy="9" rx="3" ry="2" fill="#fff" opacity=".55" transform="rotate(-30 9 9)" />
+    </svg>
+  );
+}
+
+const BLOBS = [
+  "M421 63c64 41 92 133 70 213s-94 149-175 165-170-21-221-86S28 186 69 116 196 18 268 14s89 8 153 49Z",
+  "M437 109c47 65 51 165 1 232s-155 101-243 79S44 335 23 258 37 82 106 40 218-7 296 6s94 38 141 103Z",
+  "M459 168c22 87-23 186-101 238S167 457 99 405 6 249 37 162 152 21 245 23s192 58 214 145Z",
+];
+
+/** Мягкая «клякса» для фоновых подложек. */
+export function Blob({ className = "", color = "#EDE4FF", variant = 0 }: P & { color?: string; variant?: 0 | 1 | 2 }) {
+  return (
+    <svg aria-hidden viewBox="0 0 500 460" preserveAspectRatio="none" className={`${base} ${className}`}>
+      <path d={BLOBS[variant]} fill={color} />
+    </svg>
+  );
+}
+
+/** Нижняя граница секции в виде облаков. */
+export function CloudEdge({ className = "", fill = "#fff", back }: P & { fill?: string; back?: string }) {
+  return (
+    <svg aria-hidden viewBox="0 0 1440 90" preserveAspectRatio="none" className={`${base} block w-full ${className}`}>
+      {back && (
+        <path
+          d="M0 50c40-30 100-30 130 0 30-36 110-40 150 0 40-30 110-30 150 4 36-34 120-38 160 0 44-30 110-28 150 6 34-36 118-36 160-2 40-30 116-30 150 4 30-30 110-34 150 0 40-26 100-26 140 0L1440 50V90H0Z"
+          fill={back}
+        />
+      )}
+      <path
+        d="M0 62c46-30 104-22 136 6 34-38 118-40 156 2 44-30 112-26 146 8 40-36 124-34 162 2 38-30 108-28 144 6 40-34 120-36 160 0 34-28 112-30 150 4 36-34 116-30 152 2 30-26 92-24 134-2L1440 60V90H0Z"
+        fill={fill}
+      />
+    </svg>
+  );
+}
+
+/** Нижняя граница из полукругов («фестон»). */
+export function Scallop({ className = "", fill = "#fff" }: P & { fill?: string }) {
+  const n = 24;
+  const w = 1440 / n;
+  const d = `M0 40${Array.from({ length: n }, () => `a${w / 2} ${w / 2.4} 0 0 1 ${w} 0`).join("")}V60H0Z`;
+  return (
+    <svg aria-hidden viewBox="0 0 1440 60" preserveAspectRatio="none" className={`${base} block w-full ${className}`}>
+      <path d={d} fill={fill} />
+    </svg>
+  );
+}
+
+/** Двухслойные холмы. */
+export function Hills({ className = "", fill = "#fff", back = "#EDE4FF" }: P & { fill?: string; back?: string }) {
+  return (
+    <svg aria-hidden viewBox="0 0 1440 90" preserveAspectRatio="none" className={`${base} block w-full ${className}`}>
+      <path d="M0 40C200 0 360 10 540 44S900 90 1100 40 1360 10 1440 26v64H0Z" fill={back} />
+      <path d="M0 70C180 30 380 40 600 66S980 96 1180 58s220-24 260-10v42H0Z" fill={fill} />
+    </svg>
+  );
+}
+
+/** Гирлянда из флажков. */
+export function Bunting({ className = "", count = 14 }: P & { count?: number }) {
+  const colors = ["#7545CB", "#FFD84D", "#B49AF0", "#FFC94D", "#9C7BE3", "#FFE47A"];
+  const step = 1000 / count;
+  return (
+    <svg aria-hidden viewBox="0 0 1000 70" preserveAspectRatio="none" className={`${base} ${className}`}>
+      <path d="M0 6Q500 46 1000 6" fill="none" stroke="#5B4D74" strokeOpacity=".35" strokeWidth="2" />
+      {Array.from({ length: count }, (_, i) => {
+        const x = step * i + step / 2;
+        const t = x / 1000;
+        const y = 6 + 40 * 2 * t * (1 - t) * 1; // точка на кривой Безье
+        return <path key={i} d={`M${x - step * 0.36} ${y - 1}L${x + step * 0.36} ${y - 1}L${x} ${y + 26}Z`} fill={colors[i % colors.length]} />;
+      })}
+    </svg>
+  );
+}
+
+/** Плавная завитушка. */
+export function Swirl({ className = "", color = "#B49AF0" }: P & { color?: string }) {
+  return (
+    <svg aria-hidden viewBox="0 0 220 80" className={`${base} ${className}`}>
+      <path
+        d="M4 60c30-6 46-30 60-44 10-10 26-8 26 6s-20 20-26 8c-8-14 22-30 52-24s40 40 72 38 26-30 26-30"
+        fill="none"
+        stroke={color}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        strokeDasharray="1 9"
+      />
+    </svg>
+  );
+}
+
+/** «Облачные» выпуклости по верхнему краю карточки — карточка становится облачком.
+ *  Родитель должен быть relative, контент — relative над ними. */
+export function Bumps({ color, className = "" }: { color: string; className?: string }) {
+  return (
+    <span aria-hidden className={`${base} absolute inset-x-0 top-0 ${className}`}>
+      <span className="absolute -top-5 left-[12%] size-14 rounded-full" style={{ background: color }} />
+      <span className="absolute -top-8 left-[34%] size-20 rounded-full" style={{ background: color }} />
+      <span className="absolute -top-6 right-[14%] size-16 rounded-full" style={{ background: color }} />
+    </span>
+  );
+}
+
+/** Россыпь маленьких фигурок (звёзды, сердечки, кружки) поверх фона секции. */
+export function Sprinkles({ className = "", seed = 0 }: P & { seed?: number }) {
+  const items = [
+    { x: 8, y: 18, k: "star", c: "#FFD84D", s: 18 },
+    { x: 22, y: 78, k: "heart", c: "#CDB8F7", s: 16 },
+    { x: 46, y: 8, k: "dot", c: "#B49AF0", s: 10 },
+    { x: 64, y: 88, k: "star", c: "#B49AF0", s: 14 },
+    { x: 84, y: 14, k: "heart", c: "#FFC94D", s: 15 },
+    { x: 93, y: 62, k: "dot", c: "#FFD84D", s: 12 },
+    { x: 4, y: 52, k: "dot", c: "#9C7BE3", s: 8 },
+    { x: 74, y: 40, k: "sparkle", c: "#FFD84D", s: 14 },
+  ];
+  return (
+    <div aria-hidden className={`${base} absolute inset-0 ${className}`}>
+      {items.map((it, i) => {
+        const x = (it.x + seed * 17) % 100;
+        const style = { left: `${x}%`, top: `${it.y}%`, width: it.s, height: it.s, animationDelay: `${-i * 0.7}s` };
+        if (it.k === "dot") return <span key={i} className="absolute rounded-full opacity-60 animate-float-slow" style={{ ...style, background: it.c }} />;
+        if (it.k === "heart") return <span key={i} className="absolute animate-bob" style={style}><Heart color={it.c} className="size-full" /></span>;
+        if (it.k === "sparkle") return <span key={i} className="absolute animate-twinkle" style={style}><Sparkle color={it.c} className="size-full" /></span>;
+        return <span key={i} className="absolute animate-twinkle" style={style}><Star color={it.c} className="size-full" /></span>;
+      })}
+    </div>
+  );
+}
+
+/** Маркерная «кисточка» под выделенным словом. */
+export function Brush({ className = "", color = "#FFE47A" }: P & { color?: string }) {
+  return (
+    <svg aria-hidden viewBox="0 0 200 24" preserveAspectRatio="none" className={`${base} ${className}`}>
+      <path d="M4 15c40-9 120-13 192-8 3 0 3 6 0 7-62 3-130 4-190 7-4 0-5-5-2-6Z" fill={color} />
+    </svg>
+  );
+}
